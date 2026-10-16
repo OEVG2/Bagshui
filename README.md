@@ -1,5 +1,5 @@
 ## Notable changes (OctoWoW fork)
-
+(Warning, Made with AI)
 Fork of **Bagshui 1.5.16** for OctoWoW, modernized for [ClassicAPI](https://github.com/brues-code/ClassicAPI) by Brues-Code.
 
 - **Requires ClassicAPI** (`ClassicAPI.dll` loaded through VanillaFixes). Without it, Bagshui disables itself with a chat message and leaves your settings alone.

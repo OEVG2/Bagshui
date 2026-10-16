@@ -876,8 +876,15 @@ Bagshui:AddComponent(function()
     local characterData = Bagshui.characters[characterId]
     if not characterData and Bagshui.sharedCharacters[characterId] then
       -- Character from another account: bring in its full inventory from the shared file first.
-      if BsCatalog and BsCatalog:LoadSharedInventory(characterId) then
+      local loaded, reason = false, nil
+      if BsCatalog then
+        loaded, reason = BsCatalog:LoadSharedInventory(characterId)
+      end
+      if loaded then
         characterData = Bagshui.sharedCharacters[characterId]
+      else
+        Bagshui:PrintWarning("Can't show " .. characterId .. ": " .. tostring(reason))
+        return
       end
     end
     if not characterData then

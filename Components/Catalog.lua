@@ -80,6 +80,67 @@ Bagshui:AddComponent(function()
     }
   end
 
+  --- Escape a string for use between double quotes in Lua source.
+  --- Unlike `BsUtil.Serialize()` this also handles newlines (item tooltips contain them)
+  --- and other control characters, which would otherwise make the shared file unreadable.
+  ---@param str string
+  ---@return string
+  local function escapeSharedString(str)
+    str = string.gsub(str, "\\", "\\\\")
+    str = string.gsub(str, '"', '\\"')
+    str = string.gsub(str, "\n", "\\n")
+    str = string.gsub(str, "\r", "\\r")
+    str = string.gsub(str, "%c", function(c)
+      return string.format("\\%03d", string.byte(c))
+    end)
+    return str
+  end
+
+  --- Append the Lua source for a table to `parts`. Only strings, numbers, booleans and
+  --- tables are written; anything else (and nan/infinite numbers) is skipped.
+  ---@param tbl table
+  ---@param parts string[]
+  ---@param depth number
+  local function serializeSharedTable(tbl, parts, depth)
+    table.insert(parts, "{")
+    if depth < 20 then
+      for key, value in pairs(tbl) do
+        local keyType = type(key)
+        local valueType = type(value)
+        if
+          (keyType == "string" or keyType == "number")
+          and (valueType == "string" or valueType == "number" or valueType == "boolean" or valueType == "table")
+          and not (valueType == "number" and (value ~= value or value == 1 / 0 or value == -1 / 0))
+          and not (keyType == "number" and (key ~= key or key == 1 / 0 or key == -1 / 0))
+        then
+          if keyType == "string" then
+            table.insert(parts, '["' .. escapeSharedString(key) .. '"]=')
+          else
+            table.insert(parts, "[" .. tostring(key) .. "]=")
+          end
+          if valueType == "table" then
+            serializeSharedTable(value, parts, depth + 1)
+          elseif valueType == "string" then
+            table.insert(parts, '"' .. escapeSharedString(value) .. '"')
+          else
+            table.insert(parts, tostring(value))
+          end
+          table.insert(parts, ",")
+        end
+      end
+    end
+    table.insert(parts, "}")
+  end
+
+  --- Serialize a table to Lua source that `BsUtil.Deserialize()` can read back.
+  ---@param tbl table
+  ---@return string
+  local function serializeShared(tbl)
+    local parts = {}
+    serializeSharedTable(tbl, parts, 0)
+    return table.concat(parts)
+  end
+
   -- Key suffixes for subtotals.
   local SUBTOTAL_TYPE = {
     Current = "Current",
@@ -375,10 +436,7 @@ Bagshui:AddComponent(function()
         end
       end
 
-      local catalogBody = BsUtil.Serialize(record)
-      if type(catalogBody) ~= "string" then
-        return nil
-      end
+      local catalogBody = serializeShared(record)
 
       -- Full inventory (every slot plus bag info) so other accounts can view this character's bags.
       -- References the live saved tables; nothing is copied.
@@ -394,9 +452,9 @@ Bagshui:AddComponent(function()
           }
         end
       end
-      local inventoryBody = BsUtil.Serialize(inventoryRecord)
+      local inventoryBody = serializeShared(inventoryRecord)
 
-      return catalogBody .. (inventoryBody and ("\n" .. SHARED_INVENTORY_MARKER .. "\n" .. inventoryBody) or "")
+      return catalogBody .. "\n" .. SHARED_INVENTORY_MARKER .. "\n" .. inventoryBody
     end)
 
     if not ok or type(body) ~= "string" then
@@ -495,10 +553,11 @@ Bagshui:AddComponent(function()
   --- can be viewed in a Bagshui window. Replaces the compact Catalog data in the character's record.
   ---@param characterId string
   ---@return boolean loaded
+  ---@return string? reason Why loading failed.
   function Catalog:LoadSharedInventory(characterId)
     local record = Bagshui.sharedCharacters[characterId]
     if not record or not sharedFilesAvailable() then
-      return false
+      return false, "not a shared character, or Nampower's file functions are missing"
     end
 
     -- Docked windows ask for the same character back to back, so don't read the file twice.
@@ -507,16 +566,16 @@ Bagshui:AddComponent(function()
     end
 
     local readOk, text = pcall(_G.ReadCustomFile, sharedFileName(characterId))
-    if not readOk or type(text) ~= "string" then
-      return false
+    if not readOk or type(text) ~= "string" or text == "" then
+      return false, "its shared file could not be read"
     end
     local _, markerEnd = string.find(text, SHARED_INVENTORY_MARKER, 1, true)
     if not markerEnd then
-      return false
+      return false, "its inventory hasn't been shared yet. Log in on that character (on its own account) with this version of Bagshui once"
     end
     local parseOk, inventoryRecord = pcall(BsUtil.Deserialize, string.sub(text, markerEnd + 1))
     if not parseOk or type(inventoryRecord) ~= "table" then
-      return false
+      return false, "its shared inventory couldn't be read (it was probably saved by an older version). Log in on that character once with this version of Bagshui"
     end
 
     for _, inventoryType in pairs(BS_INVENTORY_TYPE) do

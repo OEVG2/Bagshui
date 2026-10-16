@@ -1,5 +1,11 @@
 # Bagshui Changelog
 
+## 1.6.0-octo.5 - 2026-10-16
+
+### Fixed
+
+- Viewing another account's character failed with "is not a known character". Shared files are now written with a serializer that handles line breaks in item tooltips, and the error now says why a character can't be shown. Each character needs to log in once with this version to rewrite its file.
+
 ## 1.6.0-octo.4 - 2026-10-16
 
 ### Added

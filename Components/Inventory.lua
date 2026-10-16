@@ -873,7 +873,14 @@ Bagshui:AddComponent(function()
   --- Also updates the class `activeCharacterId` property.
   ---@param characterId any
   function Inventory:SetCharacter(characterId)
-    if not Bagshui.characters[characterId] then
+    local characterData = Bagshui.characters[characterId]
+    if not characterData and Bagshui.sharedCharacters[characterId] then
+      -- Character from another account: bring in its full inventory from the shared file first.
+      if BsCatalog and BsCatalog:LoadSharedInventory(characterId) then
+        characterData = Bagshui.sharedCharacters[characterId]
+      end
+    end
+    if not characterData then
       Bagshui:PrintWarning(characterId .. " is not a known character")
       return
     end
@@ -896,13 +903,13 @@ Bagshui:AddComponent(function()
 
     -- Point convenience properties to character's SavedVariables.
     for _, propName in ipairs(setCharacterConvenienceProps) do
-      if Bagshui.characters[characterId][self.inventoryTypeSavedVars] == nil then
-        Bagshui.characters[characterId][self.inventoryTypeSavedVars] = {}
+      if characterData[self.inventoryTypeSavedVars] == nil then
+        characterData[self.inventoryTypeSavedVars] = {}
       end
-      if Bagshui.characters[characterId][self.inventoryTypeSavedVars][propName] == nil then
-        Bagshui.characters[characterId][self.inventoryTypeSavedVars][propName] = {}
+      if characterData[self.inventoryTypeSavedVars][propName] == nil then
+        characterData[self.inventoryTypeSavedVars][propName] = {}
       end
-      self[propName] = Bagshui.characters[characterId][self.inventoryTypeSavedVars][propName]
+      self[propName] = characterData[self.inventoryTypeSavedVars][propName]
     end
 
     -- Initialize container info tables if needed.

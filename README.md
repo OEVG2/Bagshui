@@ -70,7 +70,7 @@ To check that it's loaded, run `/script DEFAULT_CHAT_FRAME:AddMessage(tostring(C
 
 ## Sharing between accounts
 
-Bagshui already shares items and gold between the characters on one account. With **Nampower's file functions** it also shares them with your **other accounts on the same computer**: their characters (items, equipped gear and gold) appear in the Catalog, Catalog search and item tooltips, read-only.
+Bagshui already shares items and gold between the characters on one account. With **Nampower's file functions** it also shares them with your **other accounts on the same computer**: their characters (items, equipped gear and gold) appear in the Catalog, Catalog search and item tooltips, and you can view their bags and bank from the Character menu (read-only).
 
 Setup: in OctoLauncher, enable **Mods → Nampower**. That's it. Check with `/script DEFAULT_CHAT_FRAME:AddMessage(tostring(WriteCustomFile))` (it should print `function`).
 
@@ -78,7 +78,7 @@ How it works: each character writes one file (`Bagshui_<Name>_<Realm>.txt`) to t
 
 - Log in once on each account for its characters to appear on the others. After that, other accounts' data is as fresh as that character's last logout (or last change, since it saves while you play).
 - Other accounts' characters are loaded when you log in or `/reload`.
-- They're view-only: you can't open another account's bags. They're listed in the Character Data manager (marked "other account"), but can only be deleted from the account they belong to.
+- You can view their bags, bank and keyring from the Character menu like your own alts (offline view). They're also listed in the Character Data manager (marked "other account"), but can only be deleted from the account they belong to.
 - Characters that exist in this account's own saved data always take priority.
 - Deleting an alt in the Character Data manager also stops sharing it with your other accounts.
 - Without Nampower this does nothing and costs nothing.

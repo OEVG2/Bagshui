@@ -238,9 +238,16 @@ Bagshui:AddComponent(function()
         table.insert(self.characterIdList, character)
       end
     end
+    -- Characters shared by other accounts can be viewed too.
+    for character, _ in pairs(Bagshui.sharedCharacters) do
+      table.insert(self.characterIdList, character)
+    end
+    local function sortKey(characterId)
+      local characterData = Bagshui.characters[characterId] or Bagshui.sharedCharacters[characterId]
+      return tostring(characterData.info.realm or "") .. " " .. tostring(characterData.info.name or "")
+    end
     table.sort(self.characterIdList, function(a, b)
-      return tostring(Bagshui.characters[a].info.realm or "") .. " " .. tostring(Bagshui.characters[a].info.name or "")
-        < tostring(Bagshui.characters[b].info.realm or "") .. " " .. tostring(Bagshui.characters[b].info.name or "")
+      return sortKey(a) < sortKey(b)
     end)
     -- Place the current character at the top.
     table.insert(self.characterIdList, 1, Bagshui.currentCharacterId)

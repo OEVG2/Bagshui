@@ -1,5 +1,15 @@
 # Bagshui Changelog
 
+## 1.6.0-octo.4 - 2026-10-16
+
+### Added
+
+- Characters from your other accounts now appear in the Character menu, so you can view their bags, bank and keyring the same way as your own alts (offline view, read-only). Their full inventory is stored in the shared file and only read when you select them.
+
+### Changed
+
+- Shared files are rewritten at most once per minute (was 30 seconds) because they now hold the full inventory.
+
 ## 1.6.0-octo.3 - 2026-10-16
 
 ### Added

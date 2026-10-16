@@ -38,7 +38,11 @@ Bagshui:AddComponent(function()
   local SHARED_FILE_PREFIX = "Bagshui_"
   local SHARED_ROSTER_FILE = "Bagshui_roster.txt"
   -- Minimum seconds between writes of the current character's file (a final write always happens at logout).
-  local SHARED_WRITE_MIN_INTERVAL = 30
+  local SHARED_WRITE_MIN_INTERVAL = 60
+  -- Separates the compact Catalog data from the full inventory data in a character's file.
+  -- The full inventory is only parsed when someone actually views that character's bags.
+  -- (No newlines in the marker in case the file gets line-ending conversion.)
+  local SHARED_INVENTORY_MARKER = "--[[BAGSHUI_INVENTORY_SECTION]]"
   -- `info` properties that are shared.
   local SHARED_INFO_KEYS = {
     "name", "realm", "class", "faction", "level", "race",
@@ -371,7 +375,28 @@ Bagshui:AddComponent(function()
         end
       end
 
-      return BsUtil.Serialize(record)
+      local catalogBody = BsUtil.Serialize(record)
+      if type(catalogBody) ~= "string" then
+        return nil
+      end
+
+      -- Full inventory (every slot plus bag info) so other accounts can view this character's bags.
+      -- References the live saved tables; nothing is copied.
+      local inventoryRecord = {}
+      for _, inventoryType in pairs(BS_INVENTORY_TYPE) do
+        local storageKey = BsUtil.LowercaseFirstLetter(inventoryType)
+        local stored = data[storageKey]
+        if type(stored) == "table" then
+          inventoryRecord[storageKey] = {
+            inventory = stored.inventory,
+            containers = stored.containers,
+            neverOnline = stored.neverOnline,
+          }
+        end
+      end
+      local inventoryBody = BsUtil.Serialize(inventoryRecord)
+
+      return catalogBody .. (inventoryBody and ("\n" .. SHARED_INVENTORY_MARKER .. "\n" .. inventoryBody) or "")
     end)
 
     if not ok or type(body) ~= "string" then
@@ -417,7 +442,13 @@ Bagshui:AddComponent(function()
       then
         local readOk, text = pcall(_G.ReadCustomFile, sharedFileName(characterId))
         if readOk and type(text) == "string" and text ~= "" then
-          local parseOk, record = pcall(BsUtil.Deserialize, text)
+          -- Only the compact Catalog section is parsed here; see `Catalog:LoadSharedInventory()`.
+          local catalogText = text
+          local markerStart = string.find(text, SHARED_INVENTORY_MARKER, 1, true)
+          if markerStart then
+            catalogText = string.sub(text, 1, markerStart - 1)
+          end
+          local parseOk, record = pcall(BsUtil.Deserialize, catalogText)
           if
             parseOk
             and type(record) == "table"
@@ -456,7 +487,61 @@ Bagshui:AddComponent(function()
     -- Let the Character Data manager list them too.
     if BsCharacterData and BsCharacterData.RefreshList then
       BsCharacterData:RefreshList()
+      BsCharacterData:Update()
     end
+  end
+
+  --- Load a shared character's full inventory (all slots and bag info) from its file so it
+  --- can be viewed in a Bagshui window. Replaces the compact Catalog data in the character's record.
+  ---@param characterId string
+  ---@return boolean loaded
+  function Catalog:LoadSharedInventory(characterId)
+    local record = Bagshui.sharedCharacters[characterId]
+    if not record or not sharedFilesAvailable() then
+      return false
+    end
+
+    -- Docked windows ask for the same character back to back, so don't read the file twice.
+    if record.inventoryLoadedAt and (_G.GetTime() - record.inventoryLoadedAt) < 5 then
+      return true
+    end
+
+    local readOk, text = pcall(_G.ReadCustomFile, sharedFileName(characterId))
+    if not readOk or type(text) ~= "string" then
+      return false
+    end
+    local _, markerEnd = string.find(text, SHARED_INVENTORY_MARKER, 1, true)
+    if not markerEnd then
+      return false
+    end
+    local parseOk, inventoryRecord = pcall(BsUtil.Deserialize, string.sub(text, markerEnd + 1))
+    if not parseOk or type(inventoryRecord) ~= "table" then
+      return false
+    end
+
+    for _, inventoryType in pairs(BS_INVENTORY_TYPE) do
+      local storageKey = BsUtil.LowercaseFirstLetter(inventoryType)
+      local stored = inventoryRecord[storageKey]
+      if type(stored) == "table" then
+        stored.inventory = type(stored.inventory) == "table" and stored.inventory or {}
+        stored.containers = type(stored.containers) == "table" and stored.containers or {}
+        -- Empty tables aren't serialized, so make sure every bag has an inventory table.
+        for bagNum, _ in pairs(stored.containers) do
+          if type(stored.inventory[bagNum]) ~= "table" then
+            stored.inventory[bagNum] = {}
+          end
+        end
+        for _, contents in pairs(stored.inventory) do
+          for _, item in ipairs(contents) do
+            BsItemInfo:InitializeItem(item, false, true)
+          end
+        end
+        record[storageKey] = stored
+      end
+    end
+
+    record.inventoryLoadedAt = _G.GetTime()
+    return true
   end
 
   --- Stop sharing a character: blank its file and remove it from the roster.

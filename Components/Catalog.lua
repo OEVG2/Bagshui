@@ -18,6 +18,12 @@ Bagshui:AddComponent(function()
   -- Table key for totals and prefix for subtotals.
   local TOTAL_KEY = "==Total"
 
+  -- Per-list lookup of itemStrings already present, used by `Catalog:AddToItemTable()`.
+  -- Weak keys so lists that go away don't leak their lookups.
+  local uniqueItemLookups = setmetatable({}, { __mode = "k" })
+  -- Stand-in table key for items that have no itemString (tables can't use nil as a key).
+  local NIL_ITEM_STRING_KEY = "==NoItemString"
+
   -- Money storage.
   local MONEY_ITEM = {
     itemString = BS_CATALOG_LOCATIONS.MONEY,
@@ -185,11 +191,15 @@ Bagshui:AddComponent(function()
           self:CalculatePerCharacterTotal(characterId, data, self.itemListTables.otherCharacter)
         end
 
-        -- Ensure all items are known so tooltips will load immediately.
-        for _, item in ipairs(self.itemListTables.otherCharacter) do
-          BsItemInfo:LoadItemIntoLocalGameCache(item.itemString)
-        end
       end
+    end
+
+    -- Ensure all items are known so tooltips will load immediately.
+    -- This used to run inside the character loop above, which re-loaded every previously
+    -- processed character's items again for each additional character (a hidden tooltip
+    -- load per item), so the cost grew with characters x items.
+    for _, item in ipairs(self.itemListTables.otherCharacter) do
+      BsItemInfo:LoadItemIntoLocalGameCache(item.itemString)
     end
 
     -- Produce subtotals for all characters other than the current one.
@@ -483,15 +493,30 @@ Bagshui:AddComponent(function()
   ---@param uniqueItemList any
   function Catalog:AddToItemTable(item, uniqueItemList, copy)
     -- Don't duplicate.
-    for _, existingItem in ipairs(uniqueItemList) do
-      if existingItem.itemString == item.itemString then
-        return
+    -- A lookup table of itemStrings per list replaces scanning the whole list for every
+    -- insert (which made rebuilding the account-wide list quadratic). The lookup is
+    -- rebuilt from the list whenever its recorded size doesn't match, which also covers
+    -- lists that were cleared with `BsUtil.TableClear()` or modified elsewhere.
+    local lookup = uniqueItemLookups[uniqueItemList]
+    local listSize = table.getn(uniqueItemList)
+    if not lookup or lookup.size ~= listSize then
+      lookup = { size = listSize, itemStrings = {} }
+      for _, existingItem in ipairs(uniqueItemList) do
+        lookup.itemStrings[existingItem.itemString or NIL_ITEM_STRING_KEY] = true
       end
+      uniqueItemLookups[uniqueItemList] = lookup
+    end
+
+    local itemStringKey = item.itemString or NIL_ITEM_STRING_KEY
+    if lookup.itemStrings[itemStringKey] then
+      return
     end
 
     local itemToInsert = copy and BsUtil.TableCopy(item) or item
 
     table.insert(uniqueItemList, itemToInsert)
+    lookup.itemStrings[itemStringKey] = true
+    lookup.size = listSize + 1
   end
 
   --- Prepare the storage location, then add up the item total.

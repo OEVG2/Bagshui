@@ -231,6 +231,20 @@ bagInfo.numSlots > 0 and (not bagInfo.name or not bagInfo.type)
             nowCount = 1
           end
 
+          -- ClassicAPI reports charges directly, so Bagshui doesn't have to depend on
+          -- SuperWoW's negative item counts or tooltip parsing. Only ask for filled slots,
+          -- and don't override charges already obtained above.
+          -- (Note that C_Container.GetContainerItemInfo() reports a count of 1 for charged
+          -- items, which is why the count above still comes from GetContainerItemInfo().)
+          if nowCharges == 0 and nowItemLink ~= nil then
+            local apiCharges = _G.C_Container.GetContainerItemCharges(bagNum, slotNum)
+            apiCharges = apiCharges and tonumber(apiCharges)
+            if apiCharges and apiCharges > 0 then
+              nowCharges = apiCharges
+              item.charges = apiCharges
+            end
+          end
+
           -- Process item if there are changes.
           if
             preItemLink ~= nowItemLink -- Item has changed.

@@ -11,12 +11,16 @@
 #
 name: Create WoW Addon Release From Changelog
 on:
-  push:
-    branches:
-    - main
-    paths:
-    # ❇️ Changlog file name. Case must match.
-    - 'Changelog.md'
+  # Disabled on push in this fork: it needs the upstream DEPLOY_KEY secret and rewrites the TOC version.
+  # Releases here are made by pushing a vX.Y.Z[-suffix] tag (see AutoReleaseOnVersionTag.yml).
+  # Restore the original `push` trigger below if you set up a DEPLOY_KEY secret.
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #   - main
+  #   paths:
+  #   # ❇️ Changlog file name. Case must match.
+  #   - 'Changelog.md'
 jobs:
   create-release:
     permissions:

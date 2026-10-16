@@ -269,8 +269,11 @@ Bagshui:AddComponent(function()
     end
 
     -- Make sure neither item is locked
-    local _, _, sourceLocked = _G.GetContainerItemInfo(source.bagNum, source.slotNum)
-    local _, _, targetLocked = _G.GetContainerItemInfo(target.bagNum, target.slotNum)
+    -- ClassicAPI's C_Container returns nil for empty slots, otherwise a table with `isLocked`.
+    local sourceInfo = _G.C_Container.GetContainerItemInfo(source.bagNum, source.slotNum)
+    local targetInfo = _G.C_Container.GetContainerItemInfo(target.bagNum, target.slotNum)
+    local sourceLocked = sourceInfo and sourceInfo.isLocked
+    local targetLocked = targetInfo and targetInfo.isLocked
 
     -- Only attempt the move if everything is unlocked
     if not sourceLocked and not targetLocked then

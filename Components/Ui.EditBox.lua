@@ -169,7 +169,13 @@ Bagshui:AddComponent(function()
     editBox.cursorOffset = 0
     editBox.cursorHeight = 0
     editBox.bagshuiData.textChangedProgrammatically = 0
-    editBox:SetScript("OnUpdate", _G.ScrollingEdit_OnUpdate)
+    -- Blizzard's ScrollingEdit_OnUpdate() expects to be called with no arguments and to use `this`.
+    -- ClassicAPI passes the frame as the first argument to script handlers (modern script args),
+    -- which makes ScrollingEdit_OnUpdate() treat the EditBox as the ScrollFrame and error every frame
+    -- ("attempt to call method 'GetVerticalScrollRange' (a nil value)"), so call it without arguments.
+    editBox:SetScript("OnUpdate", function()
+      _G.ScrollingEdit_OnUpdate()
+    end)
     editBox:SetScript("OnCursorChanged", self._createScrollableEditBox_OnCursorChanged)
     editBox:SetScript("OnTextSet", self._createScrollableEditBox_OnTextSet)
     editBox:SetScript("OnTextChanged", self._createScrollableEditBox_OnTextChanged)

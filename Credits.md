@@ -4,6 +4,13 @@
 
 Bagshui started life as a rewrite of EngBags and therefore would not exist without the EngInventory/EngBags developers and maintainers, including (but probably not limited to) Engival, Requital, Hador, UniRing, [Lars Kiesow](https://github.com/lkiesow), [AHHH_REPTAR](https://github.com/ahhh-reptar), [LaYt](https://github.com/laytya), and [Baroque](https://github.com/Brqje).
 
+## OctoWoW Fork
+
+- Based on Bagshui by [veechs](https://github.com/veechs/Bagshui), continued as [The-Kludge-Bureau/Bagshui](https://github.com/The-Kludge-Bureau/Bagshui), with the 1.5.16 snapshot mirrored by [Dinkleberrrg](https://github.com/Dinkleberrrg/Bagshui).
+- Built on [ClassicAPI](https://github.com/brues-code/ClassicAPI) by [Brues-Code](https://github.com/brues-code).
+- Reviewed [Salahaja/Bagshui](https://github.com/Salahaja/Bagshui) for fixes; its quest log selection fix is already in 1.5.16.
+- Like Bagshui? Consider supporting the original author, [veechs](https://www.buymeacoffee.com/veechs).
+
 ## Special Mentions
 
 - The lack of [Arkayenro](https://github.com/arkayenro)'s [ArkInventory](https://www.curseforge.com/wow/addons/ark-inventory) on Vanilla catalyzed Bagshui's development (and heavily influenced its look & feel and rules system).

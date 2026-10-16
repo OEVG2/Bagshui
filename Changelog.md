@@ -1,5 +1,21 @@
 # Bagshui Changelog
 
+## 1.6.0-octo.1 - 2026-10-16
+
+Fork of Bagshui 1.5.16 (last Vanilla/Turtle release of The-Kludge-Bureau/Bagshui) for OctoWoW, built on [ClassicAPI](https://github.com/brues-code/ClassicAPI) by Brues-Code.
+
+### Fixed
+
+- Scrollable edit boxes (such as in the Edit Category window) no longer spam `GetVerticalScrollRange` errors when ClassicAPI is loaded. ClassicAPI passes the frame as the first script argument, which Blizzard's `ScrollingEdit_OnUpdate()` doesn't expect.
+
+### Changed
+
+- **ClassicAPI is now required.** Without `ClassicAPI.dll` loaded (via VanillaFixes), Bagshui prints an explanation and stays disabled without touching SavedVariables.
+- Item move queue now checks slot locks through `C_Container.GetContainerItemInfo()`.
+- Item charges are now read from `C_Container.GetContainerItemCharges()` when SuperWoW hasn't already provided them, avoiding tooltip parsing for charged items.
+- Catalog: build the account-wide item list with a lookup table instead of rescanning the list for every item (it was quadratic and ran on every Catalog update), and preload other characters' item data once instead of once per character.
+- SavedVariables name (`BagshuiData`) and addon folder name (`Bagshui`) are unchanged, so this is a drop-in replacement for upstream Bagshui. Do not run both.
+
 ## 1.5.16 - 2026-03-21
 
 ### Changed

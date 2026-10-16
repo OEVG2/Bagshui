@@ -1081,6 +1081,18 @@ function Bagshui:OnEvent(event, arg1, arg2, arg3, arg4)
   if event == "ADDON_LOADED" then
     -- Need to check arg1 to avoid responding to this event for other addons.
     if arg1 == "Bagshui" then
+      -- This fork requires ClassicAPI (https://github.com/brues-code/ClassicAPI).
+      -- Bail out before touching SavedVariables so nothing is lost if the DLL isn't loaded.
+      if not _G.CLASSIC_API_VERSION or not _G.C_Container or not _G.C_Item then
+        self.classicApiMissing = true
+        self.eventFrame:UnregisterAllEvents()
+        _G.DEFAULT_CHAT_FRAME:AddMessage(
+          "|cffdb4e97Bagshui|r |cffff4040requires ClassicAPI.|r "
+          .. "Install ClassicAPI.dll (github.com/brues-code/ClassicAPI), add it to dlls.txt and launch via VanillaFixes. "
+          .. "Bagshui is disabled until then; your settings are untouched."
+        )
+        return
+      end
       self:AddonLoaded()
       self:LoadComponents()
     else

@@ -1,6 +1,10 @@
-## Notable changes
+## Notable changes (OctoWoW fork)
 
-None. Unchanged mirror of **The-Kludge-Bureau/Bagshui** 1.5.16, the last release for Vanilla/Turtle WoW (newer versions are WotLK-only).
+Fork of **Bagshui 1.5.16** for OctoWoW, modernized for [ClassicAPI](https://github.com/brues-code/ClassicAPI) by Brues-Code.
+
+- **Requires ClassicAPI** (`ClassicAPI.dll` loaded through VanillaFixes). Without it, Bagshui disables itself with a chat message and leaves your settings alone.
+- Drop-in replacement for upstream: same `Bagshui` folder and `BagshuiData` SavedVariables. Do not run both.
+- See [Changelog](Changelog.md) for details.
 
 ---
 
@@ -16,8 +20,6 @@ None. Unchanged mirror of **The-Kludge-Bureau/Bagshui** 1.5.16, the last release
   <img alt="Bagshui Screenshots" src="https://github.com/veechs/Bagshui/wiki/images/BagshuiScreenshots.png">
 </picture><br>
 <a href="https://github.com/veechs/Bagshui/wiki/Screenshots">More Screenshots</a></h4>
-
-<a href="https://www.buymeacoffee.com/veechs" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-orange.png" alt="Buy Me A Coffee" height="41" width="146"></a>
 
 ## Features
 
@@ -48,10 +50,22 @@ None. Unchanged mirror of **The-Kludge-Bureau/Bagshui** 1.5.16, the last release
 ## Documentation
 
 ⬇️ [Installation](#installation)
-📕 [Wiki](https://github.com/veechs/Bagshui/wiki)
+📕 [Wiki](https://github.com/veechs/Bagshui/wiki) <sup>(upstream Bagshui; applies to this fork except as noted in the [Changelog](Changelog.md))</sup>
 🙋 [FAQ](https://github.com/veechs/Bagshui/wiki/FAQ)
 🐾 [Walkthroughs](https://github.com/veechs/Bagshui/wiki/Walkthroughs)
 🕝 [Version history](Changelog.md)
+
+## Requirements
+
+This fork needs [ClassicAPI](https://github.com/brues-code/ClassicAPI) (`ClassicAPI.dll`) loaded through [VanillaFixes](https://github.com/hannesmann/vanillafixes):
+
+1. Install VanillaFixes if you haven't already.
+2. Copy `ClassicAPI.dll` into your game folder and add it to `dlls.txt`.
+3. Launch the game with `VanillaFixes.exe`.
+
+Without ClassicAPI, Bagshui prints a message in chat and disables itself (your settings are left untouched).
+
+To check that it's loaded, run `/script DEFAULT_CHAT_FRAME:AddMessage(tostring(CLASSIC_API_VERSION))` in game. A number means it is.
 
 ## Installation
 
@@ -62,7 +76,7 @@ Use [GitAddonsManager](https://woblight.gitlab.io/overview/gitaddonsmanager/).
 
 ### Manual
 
-1. [Download Bagshui](https://github.com/veechs/Bagshui/releases/latest/download/Bagshui.zip).
+1. Download `Bagshui.zip` from the latest release on this repository's **Releases** page.
 2. Extract the zip file.
 3. Ensure the resulting folder is named `Bagshui` and rename if needed.
 4. Move that folder to `[Path\To\WoW]\Interface\Addons`.
@@ -168,13 +182,8 @@ If Bagshui has not been localized for your client, many items will not be correc
 
 [^1]: In Vanilla, a _lot_ of item identification must be done either by parsing tooltips or hardcoding item IDs. Bagshui leans toward the former, and therefore is highly dependent on localization.
 
-## Donations
-
-Developing Bagshui is fun, but also a lot of work! Your support is hugely appreciated.
-<a href="https://www.buymeacoffee.com/veechs" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-orange.png" alt="Buy Me A Coffee" height="41" width="146"></a>
-
 ## Credits
 
-Bagshui owes [so much to so many people](Credits.md).
+Bagshui owes [so much to so many people](Credits.md), including its original author, [veechs](https://www.buymeacoffee.com/veechs).
 
 <br><br>

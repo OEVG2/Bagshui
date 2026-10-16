@@ -1,5 +1,11 @@
 # Bagshui Changelog
 
+## 1.6.0-octo.6 - 2026-10-16
+
+### Changed
+
+- Writing your character's data for other accounts is now spread over many frames (one bag at a time) instead of one long pause, which could cause a brief hitch about once a minute. The final write at logout is unchanged.
+
 ## 1.6.0-octo.5 - 2026-10-16
 
 ### Fixed

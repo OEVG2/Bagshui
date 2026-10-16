@@ -141,6 +141,35 @@ Bagshui:AddComponent(function()
     return table.concat(parts)
   end
 
+  --- Lua source for a table key (`["name"]=` or `[1]=`), or `nil` if the key can't be shared.
+  ---@param key string|number
+  ---@return string?
+  local function sharedKeyText(key)
+    if type(key) == "string" then
+      return '["' .. escapeSharedString(key) .. '"]='
+    elseif type(key) == "number" and key == key and key ~= 1 / 0 and key ~= -1 / 0 then
+      return "[" .. tostring(key) .. "]="
+    end
+    return nil
+  end
+
+  --- Lua source for a single value, or `nil` if the value can't be shared.
+  ---@param value any
+  ---@return string?
+  local function sharedValueText(value)
+    local valueType = type(value)
+    if valueType == "table" then
+      return serializeShared(value)
+    elseif valueType == "string" then
+      return '"' .. escapeSharedString(value) .. '"'
+    elseif valueType == "boolean" then
+      return tostring(value)
+    elseif valueType == "number" and value == value and value ~= 1 / 0 and value ~= -1 / 0 then
+      return tostring(value)
+    end
+    return nil
+  end
+
   -- Key suffixes for subtotals.
   local SUBTOTAL_TYPE = {
     Current = "Current",
@@ -393,20 +422,35 @@ Bagshui:AddComponent(function()
       return
     end
 
-    local ok, body = pcall(function()
-      local data = Bagshui.currentCharacterData
-      local info = data.info or {}
+    -- The work is split into small steps that run one per frame, so building and serializing a big
+    -- bank doesn't freeze the game for a moment. (At logout everything runs at once.)
+    if self.sharedWriteJob then
+      if not force then
+        return
+      end
+      self.sharedWriteJob = nil
+    end
 
-      local record = {
-        version = BS_DATA_VERSION,
-        id = Bagshui.currentCharacterId,
-        info = {},
-      }
+    self.lastSharedWrite = now
+    self.sharedWritePending = false
+
+    local data = Bagshui.currentCharacterData
+    local record = {
+      version = BS_DATA_VERSION,
+      id = Bagshui.currentCharacterId,
+      info = {},
+    }
+    local catalogBody
+    -- pieces[storageKey][field] = array of serialized "[key]=value," strings (or a single string for non-tables).
+    local pieces = {}
+    local steps = {}
+
+    -- Basic info and equipped items.
+    table.insert(steps, function()
+      local info = data.info or {}
       for _, key in ipairs(SHARED_INFO_KEYS) do
         record.info[key] = info[key]
       end
-
-      -- Equipped items.
       record.info.equipped = {}
       if type(info.equipped) == "table" then
         for slot, item in pairs(info.equipped) do
@@ -416,10 +460,12 @@ Bagshui:AddComponent(function()
           end
         end
       end
+    end)
 
-      -- Bags, bank, etc. Empty slots are dropped, so each bag becomes a dense array.
-      for _, inventoryType in pairs(BS_INVENTORY_TYPE) do
-        local storageKey = BsUtil.LowercaseFirstLetter(inventoryType)
+    -- Bags, bank, etc. for the Catalog. Empty slots are dropped, so each bag becomes a dense array.
+    for _, inventoryType in pairs(BS_INVENTORY_TYPE) do
+      local storageKey = BsUtil.LowercaseFirstLetter(inventoryType)
+      table.insert(steps, function()
         if data[storageKey] and data[storageKey].inventory then
           local bagsOut = {}
           for bagNum, contents in pairs(data[storageKey].inventory) do
@@ -434,47 +480,112 @@ Bagshui:AddComponent(function()
           end
           record[storageKey] = { inventory = bagsOut }
         end
-      end
+      end)
+    end
 
-      local catalogBody = serializeShared(record)
-
-      -- Full inventory (every slot plus bag info) so other accounts can view this character's bags.
-      -- References the live saved tables; nothing is copied.
-      local inventoryRecord = {}
-      for _, inventoryType in pairs(BS_INVENTORY_TYPE) do
-        local storageKey = BsUtil.LowercaseFirstLetter(inventoryType)
-        local stored = data[storageKey]
-        if type(stored) == "table" then
-          inventoryRecord[storageKey] = {
-            inventory = stored.inventory,
-            containers = stored.containers,
-            neverOnline = stored.neverOnline,
-          }
-        end
-      end
-      local inventoryBody = serializeShared(inventoryRecord)
-
-      return catalogBody .. "\n" .. SHARED_INVENTORY_MARKER .. "\n" .. inventoryBody
+    table.insert(steps, function()
+      catalogBody = serializeShared(record)
     end)
 
-    if not ok or type(body) ~= "string" then
-      Bagshui:PrintDebug("Could not serialize shared character data: " .. tostring(body))
+    -- Full inventory (every slot plus bag info) so other accounts can view this character's bags.
+    -- Serialized one bag at a time; it reads the live saved tables, nothing is copied.
+    for _, inventoryType in pairs(BS_INVENTORY_TYPE) do
+      local storageKey = BsUtil.LowercaseFirstLetter(inventoryType)
+      local stored = data[storageKey]
+      if type(stored) == "table" then
+        pieces[storageKey] = {}
+        for _, field in ipairs({ "inventory", "containers", "neverOnline" }) do
+          local value = stored[field]
+          if type(value) == "table" then
+            pieces[storageKey][field] = {}
+            for subKey in pairs(value) do
+              table.insert(steps, function()
+                local current = data[storageKey] and data[storageKey][field]
+                local subValue = type(current) == "table" and current[subKey] or nil
+                local keyText = sharedKeyText(subKey)
+                local valueText = subValue ~= nil and sharedValueText(subValue) or nil
+                if keyText and valueText then
+                  table.insert(pieces[storageKey][field], keyText .. valueText .. ",")
+                end
+              end)
+            end
+          elseif value ~= nil then
+            pieces[storageKey][field] = sharedValueText(value)
+          end
+        end
+      end
+    end
+
+    -- Put it all together and write it.
+    table.insert(steps, function()
+      local inventoryParts = { "{" }
+      for storageKey, fields in pairs(pieces) do
+        table.insert(inventoryParts, sharedKeyText(storageKey) .. "{")
+        for field, content in pairs(fields) do
+          local valueText
+          if type(content) == "table" then
+            valueText = "{" .. table.concat(content) .. "}"
+          else
+            valueText = content
+          end
+          if valueText then
+            table.insert(inventoryParts, sharedKeyText(field) .. valueText .. ",")
+          end
+        end
+        table.insert(inventoryParts, "},")
+      end
+      table.insert(inventoryParts, "}")
+
+      local body = catalogBody .. "\n" .. SHARED_INVENTORY_MARKER .. "\n" .. table.concat(inventoryParts)
+
+      -- Skip the write if nothing changed.
+      if body == self.lastSharedBody then
+        return
+      end
+
+      self:JoinSharedRoster()
+      local written = pcall(_G.WriteCustomFile, sharedFileName(Bagshui.currentCharacterId), "-- " .. now .. "\n" .. body, "w")
+      if written then
+        self.lastSharedBody = body
+      end
+    end)
+
+    local job = { steps = steps, index = 1 }
+    local function runStep()
+      local step = job.steps[job.index]
+      job.index = job.index + 1
+      local ok, err = pcall(step)
+      if not ok then
+        Bagshui:PrintDebug("Could not write shared character data: " .. tostring(err))
+        job.index = getn(job.steps) + 1
+      end
+    end
+
+    if force then
+      while job.index <= getn(job.steps) do
+        runStep()
+      end
       return
     end
 
-    self.sharedWritePending = false
-    self.lastSharedWrite = now
-
-    -- Skip the write if nothing changed.
-    if body == self.lastSharedBody then
-      return
+    self.sharedWriteJob = job
+    if not self.sharedWriteFrame then
+      self.sharedWriteFrame = _G.CreateFrame("Frame")
     end
-
-    self:JoinSharedRoster()
-    local written = pcall(_G.WriteCustomFile, sharedFileName(Bagshui.currentCharacterId), "-- " .. now .. "\n" .. body, "w")
-    if written then
-      self.lastSharedBody = body
-    end
+    self.sharedWriteFrame:SetScript("OnUpdate", function()
+      if self.sharedWriteJob ~= job then
+        -- Replaced by a forced write at logout.
+        this:SetScript("OnUpdate", nil)
+        return
+      end
+      if job.index <= getn(job.steps) then
+        runStep()
+      end
+      if job.index > getn(job.steps) then
+        self.sharedWriteJob = nil
+        this:SetScript("OnUpdate", nil)
+      end
+    end)
   end
 
   --- Read the characters other accounts have shared and put them in `Bagshui.sharedCharacters`.

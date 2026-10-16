@@ -442,12 +442,44 @@ Bagshui:AddComponent(function()
                 BsItemInfo:InitializeItem(item, false, true)
               end
             end
+            -- Last time the character's file was written (shown in the Character Data manager).
+            local _, _, writtenAt = string.find(text, "^%-%- (%d+)")
+            record.lastLogout = tonumber(writtenAt)
             Bagshui.sharedCharacters[characterId] = record
           else
             Bagshui:PrintDebug("Ignoring shared character file for " .. characterId)
           end
         end
       end
+    end
+
+    -- Let the Character Data manager list them too.
+    if BsCharacterData and BsCharacterData.RefreshList then
+      BsCharacterData:RefreshList()
+    end
+  end
+
+  --- Stop sharing a character: blank its file and remove it from the roster.
+  --- Called when a character is deleted from the Character Data manager.
+  ---@param characterId string
+  function Catalog:ForgetSharedCharacter(characterId)
+    if not sharedFilesAvailable() then
+      return
+    end
+
+    pcall(_G.WriteCustomFile, sharedFileName(characterId), "", "w")
+
+    local ok, roster = pcall(_G.ReadCustomFile, SHARED_ROSTER_FILE)
+    if ok and type(roster) == "string" then
+      local rosterLine = "R~" .. characterId
+      local remaining = ""
+      for line in string.gfind(roster, "[^\n]+") do
+        line = BsUtil.Trim(line)
+        if line ~= rosterLine then
+          remaining = remaining .. line .. "\n"
+        end
+      end
+      pcall(_G.WriteCustomFile, SHARED_ROSTER_FILE, remaining, "w")
     end
   end
 

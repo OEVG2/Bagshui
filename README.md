@@ -78,9 +78,9 @@ How it works: each character writes one file (`Bagshui_<Name>_<Realm>.txt`) to t
 
 - Log in once on each account for its characters to appear on the others. After that, other accounts' data is as fresh as that character's last logout (or last change, since it saves while you play).
 - Other accounts' characters are loaded when you log in or `/reload`.
-- They're view-only: you can't open another account's bags.
+- They're view-only: you can't open another account's bags. They're listed in the Character Data manager (marked "other account"), but can only be deleted from the account they belong to.
 - Characters that exist in this account's own saved data always take priority.
-- To forget a character, delete its `Bagshui_*.txt` file from `CustomData` and its line in `Bagshui_roster.txt`.
+- Deleting an alt in the Character Data manager also stops sharing it with your other accounts.
 - Without Nampower this does nothing and costs nothing.
 
 Inspired by [Bagertz](https://github.com/Salahaja/Bagertz) (tooltip counts across accounts), which uses the same Nampower folder.

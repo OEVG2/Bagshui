@@ -1,5 +1,15 @@
 # Bagshui Changelog
 
+## 1.6.0-octo.3 - 2026-10-16
+
+### Added
+
+- Characters from your other accounts are now listed in the Character Data manager, marked "other account". They are view-only there and can only be deleted from the account they belong to.
+
+### Changed
+
+- Deleting an alt in the Character Data manager now also stops sharing it with your other accounts (its shared file is cleared and it's removed from the shared roster).
+
 ## 1.6.0-octo.2 - 2026-10-16
 
 ### Added

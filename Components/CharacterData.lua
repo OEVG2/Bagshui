@@ -27,13 +27,14 @@ Bagshui:AddComponent(function()
       -- Loop for scrollable list entries.
       if type(characterId) == "table" then
         for charId, _ in pairs(characterId) do
-          if charId == Bagshui.currentCharacterId then
+          if charId == Bagshui.currentCharacterId or Bagshui.sharedCharacters[charId] then
             return true
           end
         end
       end
       -- Single object ID.
-      return characterId == Bagshui.currentCharacterId
+      -- Characters from other accounts have to be deleted from the account they belong to.
+      return characterId == Bagshui.currentCharacterId or Bagshui.sharedCharacters[characterId] ~= nil
     end,
 
     -- This metatable will be assigned to each character in SavedVariables BagshuiData.characters.
@@ -82,6 +83,12 @@ Bagshui:AddComponent(function()
 
     -- Calls ObjectList:Init().
     self._super.Init(self)
+
+    -- ObjectList points `self.list` at the saved characters table (`Bagshui.characters`).
+    -- Replace it with a merged view that also contains characters shared by other accounts,
+    -- which are not saved. See `CharacterData:RefreshList()` and `CharacterData:Delete()`.
+    self.list = {}
+    self:RefreshList()
 
     -- Generate the Character auto-split menu's initial list.
     CharacterData:Update()
@@ -162,7 +169,11 @@ Bagshui:AddComponent(function()
         -- Show correctly formatted data.
         managerColumnTextFunc = function(fieldName, id, obj, preliminaryDisplayValue)
           if fieldName == "name" then
-            return BsCharacter:FormatCharacterName(id) or preliminaryDisplayValue
+            local formattedName = BsCharacter:FormatCharacterName(id) or preliminaryDisplayValue
+            if Bagshui.sharedCharacters[id] and type(formattedName) == "string" then
+              formattedName = formattedName .. " " .. GRAY_FONT_COLOR_CODE .. "(other account)" .. FONT_COLOR_CODE_CLOSE
+            end
+            return formattedName
           elseif fieldName == "lastLogout" then
             return _G.date(
               "%Y-%b-%d",
@@ -176,6 +187,45 @@ Bagshui:AddComponent(function()
         deletePromptExtraInfo = L.CharacterDataManager_DeleteInfo,
       }
     )
+  end
+
+  --- Rebuild the list shown in the manager: this account's saved characters plus
+  --- characters shared by other accounts (which are never saved here).
+  function CharacterData:RefreshList()
+    BsUtil.TableClear(self.list)
+    for id, character in pairs(Bagshui.characters) do
+      self.list[id] = character
+    end
+    for id, character in pairs(Bagshui.sharedCharacters) do
+      if not self.list[id] then
+        self.list[id] = character
+      end
+    end
+    self:UpdateTrackingLists()
+  end
+
+  --- Delete a character from this account's saved data. (Subclass override.)
+  --- Because `self.list` is a merged view, the base implementation can't be used.
+  --- The character's shared file is also cleared so other accounts stop seeing it.
+  ---@param characterId string
+  ---@return boolean success
+  function CharacterData:Delete(characterId)
+    if
+      characterId == Bagshui.currentCharacterId
+      or Bagshui.sharedCharacters[characterId]
+      or not Bagshui.characters[characterId]
+    then
+      Bagshui:PrintWarning(string.format(L.ObjectList_ActionNotAllowed, L.Deletion, L.CharacterData))
+      return false
+    end
+
+    Bagshui.characters[characterId] = nil
+    if BsCatalog and BsCatalog.ForgetSharedCharacter then
+      BsCatalog:ForgetSharedCharacter(characterId)
+    end
+    self:RefreshList()
+    Bagshui:RaiseEvent(self.objectChangeEvent, false, characterId)
+    return true
   end
 
   -- Keep the Character auto-split menu current when old alts are deleted.

@@ -623,10 +623,11 @@ Bagshui:AddComponent(function()
   ---@param includeRealm boolean? Append the character's realm to the end.
   ---@return string?
   function Character:FormatCharacterName(characterId, includeRealm)
-    if not characterId or not Bagshui.characters[characterId] then
+    local characterData = characterId and (Bagshui.characters[characterId] or Bagshui.sharedCharacters[characterId])
+    if not characterData then
       return
     end
-    local characterInfo = Bagshui.characters[characterId].info
+    local characterInfo = characterData.info
     return
       -- Class color.
       (

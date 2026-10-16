@@ -1005,6 +1005,11 @@ function Bagshui:AddonLoaded()
   self.characters = _G.BagshuiData[charactersKey]
   self.currentCharacterData = _G.BagshuiData[charactersKey][self.currentCharacterId]
 
+  -- Characters from other WoW accounts on this computer (read-only).
+  -- Filled by `Catalog:LoadSharedCharacters()` from files in Nampower's shared CustomData folder.
+  -- Kept separate from `self.characters` so they are never written to this account's SavedVariables.
+  self.sharedCharacters = {}
+
   -- Character info (data will be populated by Character class).
   if self.currentCharacterData[BS_CONFIG_KEY.CHARACTER_INFO] == nil then
     self.currentCharacterData[BS_CONFIG_KEY.CHARACTER_INFO] = {}
@@ -1122,6 +1127,10 @@ function Bagshui:OnEvent(event, arg1, arg2, arg3, arg4)
     -- Used by `Inventory:UpdateCache()` to move `item.bagshuiDate` forward
     -- so that only in-game time counts for stock states.
     self.currentCharacterData.lastLogout = _G.time()
+    -- Make sure other accounts see this character's final state.
+    if self.components.Catalog and self.components.Catalog.WriteSharedCharacter then
+      self.components.Catalog:WriteSharedCharacter(true)
+    end
   end
 
   -- Pass events on to consumers.

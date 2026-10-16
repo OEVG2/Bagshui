@@ -30,6 +30,52 @@ Bagshui:AddComponent(function()
     count = 0,
   }
 
+  -- Cross-account sharing.
+  -- Addons can't read another account's SavedVariables, but Nampower provides
+  -- `WriteCustomFile()`/`ReadCustomFile()` for a `CustomData` folder that every client launched
+  -- from this installation shares. Each character writes one file with the parts of its data the
+  -- Catalog needs, and every character reads the others' files at startup.
+  local SHARED_FILE_PREFIX = "Bagshui_"
+  local SHARED_ROSTER_FILE = "Bagshui_roster.txt"
+  -- Minimum seconds between writes of the current character's file (a final write always happens at logout).
+  local SHARED_WRITE_MIN_INTERVAL = 30
+  -- `info` properties that are shared.
+  local SHARED_INFO_KEYS = {
+    "name", "realm", "class", "faction", "level", "race",
+    "localizedClass", "localizedFaction", "localizedRace", "money",
+  }
+
+  --- Are Nampower's file functions available?
+  ---@return boolean
+  local function sharedFilesAvailable()
+    return type(_G.WriteCustomFile) == "function" and type(_G.ReadCustomFile) == "function"
+  end
+
+  --- File name for a character's shared data.
+  ---@param characterId string
+  ---@return string
+  local function sharedFileName(characterId)
+    return SHARED_FILE_PREFIX .. (string.gsub(characterId, "[^%w]", "_")) .. ".txt"
+  end
+
+  --- Reduce an item to the few properties the Catalog uses.
+  ---@param item table?
+  ---@return table?
+  local function compactItem(item)
+    if type(item) ~= "table" or item.emptySlot == 1 or not item.itemString or (item.count or 0) < 1 then
+      return nil
+    end
+    return {
+      id = item.id,
+      itemString = item.itemString,
+      itemLink = item.itemLink,
+      count = item.count,
+      name = item.name,
+      texture = item.texture,
+      quality = item.quality,
+    }
+  end
+
   -- Key suffixes for subtotals.
   local SUBTOTAL_TYPE = {
     Current = "Current",
@@ -166,10 +212,11 @@ Bagshui:AddComponent(function()
 
     self:CreateTotalKeys(self.totals)
 
-    -- Process all characters in SavedVariables.
-    for characterId, data in pairs(Bagshui.characters) do
+    -- Process one character: register it in the realm lists and, if it isn't the
+    -- current character, calculate its totals.
+    local function processCharacter(characterId, data)
       -- Make sure it's a fully formed character.
-      if data.info and data.info.name then
+      if data.info and data.info.name and data.info.realm then
         local realm = data.info.realm
 
         -- Initialize realm storage table.
@@ -190,7 +237,26 @@ Bagshui:AddComponent(function()
         if characterId ~= Bagshui.currentCharacterId then
           self:CalculatePerCharacterTotal(characterId, data, self.itemListTables.otherCharacter)
         end
+      end
+    end
 
+    -- Read characters from other accounts (if Nampower's file functions are available).
+    self:LoadSharedCharacters()
+
+    -- Process all characters in SavedVariables.
+    for characterId, data in pairs(Bagshui.characters) do
+      processCharacter(characterId, data)
+    end
+
+    -- Process characters from other accounts on this computer (see `Bagshui.sharedCharacters`).
+    -- A pcall keeps one malformed shared character from breaking the whole Catalog.
+    for characterId, data in pairs(Bagshui.sharedCharacters) do
+      if not getmetatable(data) and BsCharacterData and BsCharacterData.objectMetatable then
+        setmetatable(data, BsCharacterData.objectMetatable)
+      end
+      local ok, err = pcall(processCharacter, characterId, data)
+      if not ok then
+        Bagshui:PrintDebug("Skipping shared character " .. tostring(characterId) .. ": " .. tostring(err))
       end
     end
 
@@ -219,6 +285,170 @@ Bagshui:AddComponent(function()
 
     -- Allow events to be processed normally.
     self.initialized = true
+  end
+
+  --- Add this character to the shared roster, once per session.
+  --- Lua can't list a directory, so the roster is how other characters find our file.
+  function Catalog:JoinSharedRoster()
+    if self.joinedSharedRoster then
+      return
+    end
+    self.joinedSharedRoster = true
+
+    local rosterLine = "R~" .. Bagshui.currentCharacterId
+    local ok, roster = pcall(_G.ReadCustomFile, SHARED_ROSTER_FILE)
+    if ok and type(roster) == "string" then
+      for line in string.gfind(roster, "[^\n]+") do
+        if BsUtil.Trim(line) == rosterLine then
+          return
+        end
+      end
+    end
+    -- Appended (not rewritten) because several clients may start at the same moment.
+    pcall(_G.WriteCustomFile, SHARED_ROSTER_FILE, rosterLine .. "\n", "a")
+  end
+
+  --- Write the current character's Catalog data where characters on other accounts can read it.
+  --- Rate limited; `force` skips the limit (used at logout).
+  ---@param force boolean?
+  function Catalog:WriteSharedCharacter(force)
+    if not sharedFilesAvailable() then
+      return
+    end
+
+    -- Wait until the character's basic info has been filled in.
+    local currentInfo = Bagshui.currentCharacterData.info
+    if not currentInfo or not currentInfo.name or currentInfo.name == "" or not currentInfo.realm or currentInfo.realm == "" then
+      return
+    end
+
+    local now = _G.time()
+    if not force and self.lastSharedWrite and (now - self.lastSharedWrite) < SHARED_WRITE_MIN_INTERVAL then
+      self.sharedWritePending = true
+      return
+    end
+
+    local ok, body = pcall(function()
+      local data = Bagshui.currentCharacterData
+      local info = data.info or {}
+
+      local record = {
+        version = BS_DATA_VERSION,
+        id = Bagshui.currentCharacterId,
+        info = {},
+      }
+      for _, key in ipairs(SHARED_INFO_KEYS) do
+        record.info[key] = info[key]
+      end
+
+      -- Equipped items.
+      record.info.equipped = {}
+      if type(info.equipped) == "table" then
+        for slot, item in pairs(info.equipped) do
+          local compacted = compactItem(item)
+          if compacted then
+            record.info.equipped[slot] = compacted
+          end
+        end
+      end
+
+      -- Bags, bank, etc. Empty slots are dropped, so each bag becomes a dense array.
+      for _, inventoryType in pairs(BS_INVENTORY_TYPE) do
+        local storageKey = BsUtil.LowercaseFirstLetter(inventoryType)
+        if data[storageKey] and data[storageKey].inventory then
+          local bagsOut = {}
+          for bagNum, contents in pairs(data[storageKey].inventory) do
+            local list = {}
+            for _, item in ipairs(contents) do
+              local compacted = compactItem(item)
+              if compacted then
+                table.insert(list, compacted)
+              end
+            end
+            bagsOut[bagNum] = list
+          end
+          record[storageKey] = { inventory = bagsOut }
+        end
+      end
+
+      return BsUtil.Serialize(record)
+    end)
+
+    if not ok or type(body) ~= "string" then
+      Bagshui:PrintDebug("Could not serialize shared character data: " .. tostring(body))
+      return
+    end
+
+    self.sharedWritePending = false
+    self.lastSharedWrite = now
+
+    -- Skip the write if nothing changed.
+    if body == self.lastSharedBody then
+      return
+    end
+
+    self:JoinSharedRoster()
+    local written = pcall(_G.WriteCustomFile, sharedFileName(Bagshui.currentCharacterId), "-- " .. now .. "\n" .. body, "w")
+    if written then
+      self.lastSharedBody = body
+    end
+  end
+
+  --- Read the characters other accounts have shared and put them in `Bagshui.sharedCharacters`.
+  --- Characters in this account's own SavedVariables always take priority.
+  function Catalog:LoadSharedCharacters()
+    BsUtil.TableClear(Bagshui.sharedCharacters)
+    if not sharedFilesAvailable() then
+      return
+    end
+
+    local ok, roster = pcall(_G.ReadCustomFile, SHARED_ROSTER_FILE)
+    if not ok or type(roster) ~= "string" then
+      return
+    end
+
+    for line in string.gfind(roster, "[^\n]+") do
+      local _, _, characterId = string.find(BsUtil.Trim(line), "^R~(.+)$")
+      if
+        characterId
+        and characterId ~= Bagshui.currentCharacterId
+        and not Bagshui.characters[characterId]
+        and not Bagshui.sharedCharacters[characterId]
+      then
+        local readOk, text = pcall(_G.ReadCustomFile, sharedFileName(characterId))
+        if readOk and type(text) == "string" and text ~= "" then
+          local parseOk, record = pcall(BsUtil.Deserialize, text)
+          if
+            parseOk
+            and type(record) == "table"
+            and record.version == BS_DATA_VERSION
+            and type(record.info) == "table"
+            and type(record.info.name) == "string"
+            and type(record.info.realm) == "string"
+          then
+            -- Fill in any properties the file doesn't carry, the same way Bagshui does for its own saved items.
+            for _, inventoryType in pairs(BS_INVENTORY_TYPE) do
+              local storageKey = BsUtil.LowercaseFirstLetter(inventoryType)
+              if type(record[storageKey]) == "table" and type(record[storageKey].inventory) == "table" then
+                for _, contents in pairs(record[storageKey].inventory) do
+                  for _, item in ipairs(contents) do
+                    BsItemInfo:InitializeItem(item, false, true)
+                  end
+                end
+              end
+            end
+            if type(record.info.equipped) == "table" then
+              for _, item in pairs(record.info.equipped) do
+                BsItemInfo:InitializeItem(item, false, true)
+              end
+            end
+            Bagshui.sharedCharacters[characterId] = record
+          else
+            Bagshui:PrintDebug("Ignoring shared character file for " .. characterId)
+          end
+        end
+      end
+    end
   end
 
   --- Sort an array of item tables alphabetically by name.
@@ -287,6 +517,9 @@ Bagshui:AddComponent(function()
 
     -- Reset flag.
     self.tooltipUpdateNeeded = false
+
+    -- Share the current character with other accounts.
+    self:WriteSharedCharacter()
   end
 
   --- Iterate a character's item storage locations and collect sums of each item.

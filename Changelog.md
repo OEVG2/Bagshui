@@ -1,5 +1,11 @@
 # Bagshui Changelog
 
+## 1.6.0-octo.2 - 2026-10-16
+
+### Added
+
+- **Share the Catalog between accounts on the same computer** using Nampower's `WriteCustomFile`/`ReadCustomFile`. Each character writes its items, equipped gear and gold to the shared `CustomData` folder, and characters from your other accounts appear in the Catalog, Catalog search and item tooltips (read-only). Requires Nampower; without it nothing changes. See the README.
+
 ## 1.6.0-octo.1 - 2026-10-16
 
 Fork of Bagshui 1.5.16 (last Vanilla/Turtle release of The-Kludge-Bureau/Bagshui) for OctoWoW, built on [ClassicAPI](https://github.com/brues-code/ClassicAPI) by Brues-Code.

@@ -3,6 +3,7 @@
 Fork of **Bagshui 1.5.16** for OctoWoW, modernized for [ClassicAPI](https://github.com/brues-code/ClassicAPI) by Brues-Code.
 
 - **Requires ClassicAPI** (`ClassicAPI.dll` loaded through VanillaFixes). Without it, Bagshui disables itself with a chat message and leaves your settings alone.
+- **Multi-account Catalog:** items and gold from your other WoW accounts on the same computer show up in the Catalog and item tooltips, via Nampower's shared file folder. See [Sharing between accounts](#sharing-between-accounts).
 - Drop-in replacement for upstream: same `Bagshui` folder and `BagshuiData` SavedVariables. Do not run both.
 - See [Changelog](Changelog.md) for details.
 
@@ -66,6 +67,23 @@ This fork needs [ClassicAPI](https://github.com/brues-code/ClassicAPI) (`Classic
 Without ClassicAPI, Bagshui prints a message in chat and disables itself (your settings are left untouched).
 
 To check that it's loaded, run `/script DEFAULT_CHAT_FRAME:AddMessage(tostring(CLASSIC_API_VERSION))` in game. A number means it is.
+
+## Sharing between accounts
+
+Bagshui already shares items and gold between the characters on one account. With **Nampower's file functions** it also shares them with your **other accounts on the same computer**: their characters (items, equipped gear and gold) appear in the Catalog, Catalog search and item tooltips, read-only.
+
+Setup: in OctoLauncher, enable **Mods → Nampower**. That's it. Check with `/script DEFAULT_CHAT_FRAME:AddMessage(tostring(WriteCustomFile))` (it should print `function`).
+
+How it works: each character writes one file (`Bagshui_<Name>_<Realm>.txt`) to the `CustomData` folder, which every client launched from the same install shares, and a short `Bagshui_roster.txt` lists who has one. At startup Bagshui reads the other accounts' files. No scripts, passwords or pairing.
+
+- Log in once on each account for its characters to appear on the others. After that, other accounts' data is as fresh as that character's last logout (or last change, since it saves while you play).
+- Other accounts' characters are loaded when you log in or `/reload`.
+- They're view-only: you can't open another account's bags.
+- Characters that exist in this account's own saved data always take priority.
+- To forget a character, delete its `Bagshui_*.txt` file from `CustomData` and its line in `Bagshui_roster.txt`.
+- Without Nampower this does nothing and costs nothing.
+
+Inspired by [Bagertz](https://github.com/Salahaja/Bagertz) (tooltip counts across accounts), which uses the same Nampower folder.
 
 ## Installation
 

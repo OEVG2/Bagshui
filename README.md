@@ -18,10 +18,7 @@ Fork of **Bagshui 1.5.16** for WoW 1.18.1 Clients, modernized for [ClassicAPI](h
 
 <h4><picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/veechs/Bagshui/wiki/images/BagshuiScreenshots.png">
-  <img alt="Bagshui Screenshots" src="https://github.com/veechs/Bagshui/wiki/images/BagshuiScreenshots.png">
 </picture><br>
-<a href="https://github.com/veechs/Bagshui/wiki/Screenshots">More Screenshots</a></h4>
-
 ## Features
 
 - Single window inventory for Bags, Bank, and Keyring.

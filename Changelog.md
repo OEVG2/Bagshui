@@ -1,5 +1,11 @@
 # Bagshui Changelog
 
+## 1.6.0-octo.7 - 2026-10-17
+
+### Fixed
+
+- Other accounts' characters showed "Offline inventory not available" because octo.6 wrote an empty inventory section. Each character needs to log in once with this version to rewrite its file.
+
 ## 1.6.0-octo.6 - 2026-10-16
 
 ### Changed

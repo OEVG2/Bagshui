@@ -494,11 +494,15 @@ Bagshui:AddComponent(function()
       local stored = data[storageKey]
       if type(stored) == "table" then
         pieces[storageKey] = {}
-        for _, field in ipairs({ "inventory", "containers", "neverOnline" }) do
+        for _, fieldName in ipairs({ "inventory", "containers", "neverOnline" }) do
+          -- Lua 5.0 doesn't give closures their own copy of `for` loop variables, so copy
+          -- everything the delayed steps use into locals declared inside the loop body.
+          local field = fieldName
           local value = stored[field]
           if type(value) == "table" then
             pieces[storageKey][field] = {}
-            for subKey in pairs(value) do
+            for loopKey in pairs(value) do
+              local subKey = loopKey
               table.insert(steps, function()
                 local current = data[storageKey] and data[storageKey][field]
                 local subValue = type(current) == "table" and current[subKey] or nil

@@ -1,5 +1,11 @@
 # Bagshui Changelog
 
+## 1.6.0-octo.8 - 2026-10-17
+
+### Changed
+
+- Your character's shared file is now only rebuilt when your items, equipment, money or character info actually changed, instead of every minute. Idle play does no sharing work at all.
+
 ## 1.6.0-octo.7 - 2026-10-17
 
 ### Fixed

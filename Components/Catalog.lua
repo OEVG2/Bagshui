@@ -260,9 +260,19 @@ Bagshui:AddComponent(function()
     end
 
     if event == "BAGSHUI_CHARACTER_UPDATE" then
+      self.sharedDirty = true
       -- Refresh the current character's name as we may now have more data.
       self:StoreFormattedCharacterName(Bagshui.currentCharacterId, Bagshui.currentCharacterData.info)
       return
+    end
+
+    -- Anything that can change what other accounts see means the shared file needs rewriting.
+    if
+      event == "BAGSHUI_EQUIPPED_UPDATE"
+      or event == "BAGSHUI_INVENTORY_CACHE_UPDATE"
+      or event == "BAGSHUI_MONEY_UPDATE"
+    then
+      self.sharedDirty = true
     end
 
     if event == "BAGSHUI_CHARACTER_LEARNED_RECIPE" then
@@ -416,6 +426,12 @@ Bagshui:AddComponent(function()
       return
     end
 
+    -- Nothing has changed since the last successful write: nothing to do.
+    -- (`sharedDirty` is nil until the first write, which counts as dirty.)
+    if self.sharedDirty == false and self.lastSharedBody then
+      return
+    end
+
     local now = _G.time()
     if not force and self.lastSharedWrite and (now - self.lastSharedWrite) < SHARED_WRITE_MIN_INTERVAL then
       self.sharedWritePending = true
@@ -433,6 +449,8 @@ Bagshui:AddComponent(function()
 
     self.lastSharedWrite = now
     self.sharedWritePending = false
+    -- Cleared now so a change that happens while the steps run triggers another write.
+    self.sharedDirty = false
 
     local data = Bagshui.currentCharacterData
     local record = {
@@ -551,6 +569,8 @@ Bagshui:AddComponent(function()
       local written = pcall(_G.WriteCustomFile, sharedFileName(Bagshui.currentCharacterId), "-- " .. now .. "\n" .. body, "w")
       if written then
         self.lastSharedBody = body
+      else
+        self.sharedDirty = true
       end
     end)
 
@@ -561,6 +581,7 @@ Bagshui:AddComponent(function()
       local ok, err = pcall(step)
       if not ok then
         Bagshui:PrintDebug("Could not write shared character data: " .. tostring(err))
+        self.sharedDirty = true
         job.index = getn(job.steps) + 1
       end
     end

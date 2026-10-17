@@ -74,7 +74,7 @@ Bagshui:AddComponent(function()
         20559, -- Arathi Basin Mark of Honor
         19322, -- Warsong Mark of Honor
         20558, -- Warsong Gulch Mark of Honor
-        61793, -- Arena Mark of Honor (Turtle WoW)
+        61793, -- Arena Mark of Honor (WoW 1.18.1 Clients)
       },
 
       ["Tokens.BlastedLands"] = {

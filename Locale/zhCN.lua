@@ -520,7 +520,7 @@ Bagshui:LoadComponent(function()
     ["NameIdentifier_Elixir"] = [[药剂]],
     ["NameIdentifier_Firestone"] = [[火焰石]],
     ["NameIdentifier_FrostOil"] = [[冰霜之油]],
-    ["NameIdentifier_Glyph_TurtleWoW"] = [[雕文]], -- 与 type('Key') 一起使用以识别 Turtle WoW 雕文。
+    ["NameIdentifier_Glyph_TurtleWoW"] = [[雕文]], -- 与 type('Key') 一起使用以识别 WoW 1.18.1 Clients 雕文。
     ["NameIdentifier_HallowedWand"] = [[神圣魔杖]],
     ["NameIdentifier_Idol"] = [[神像]],
     ["NameIdentifier_Juju"] = [[巫毒]],

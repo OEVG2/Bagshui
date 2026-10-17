@@ -487,7 +487,7 @@ Bagshui:LoadComponent(function()
     ["NameIdentifier_Elixir"] = [[Elixir]],
     ["NameIdentifier_Firestone"] = [[Firestone]],
     ["NameIdentifier_FrostOil"] = [[Frost Oil]],
-    ["NameIdentifier_Glyph_TurtleWoW"] = [[Glyph]], -- Used along with type('Key') to identify Turtle WoW glyphs.
+    ["NameIdentifier_Glyph_TurtleWoW"] = [[Glyph]], -- Used along with type('Key') to identify WoW 1.18.1 Clients glyphs.
     ["NameIdentifier_HallowedWand"] = [[Hallowed Wand]],
     ["NameIdentifier_Idol"] = [[Idol]],
     ["NameIdentifier_Juju"] = [[Juju]],
@@ -514,12 +514,12 @@ Bagshui:LoadComponent(function()
     ["TooltipIdentifier_Locked"] = [[Locked]],
     ["TooltipIdentifier_Mount"] = [[Use: Summons and dismisses a rideable]],
     ["TooltipIdentifier_MountAQ40"] = [[Use: Emits a high frequency sound]],
-    ["TooltipIdentifier_Mount_TurtleWoW"] = [[Use: Adds a mount to the player's mount collection]], -- Turtle has a completely different tooltip for mounts.
+    ["TooltipIdentifier_Mount_TurtleWoW"] = [[Use: Adds a mount to the player's mount collection]], -- This client has a completely different tooltip for mounts.
     ["TooltipIdentifier_Openable"] = [[<Right Click to Open>]],
     ["TooltipIdentifier_PotionHealth"] = [[/Restores %d+ to %d+ health\./]], -- Wrap in slashes to activate pattern matching.
     ["TooltipIdentifier_PotionMana"] = [[/Restores %d+ to %d+ mana\./]], -- Wrap in slashes to activate pattern matching.
     ["TooltipIdentifier_QuestItem"] = [[Quest Item]],
-    ["TooltipIdentifier_Recipe"] = [[Use: Teaches you how to]], -- Needed because Turtle WoW has some of their custom recipes categorized as Consumables.
+    ["TooltipIdentifier_Recipe"] = [[Use: Teaches you how to]], -- Needed because WoW 1.18.1 Clients have some of their custom recipes categorized as Consumables.
     ["TooltipIdentifier_Toy_TurtleWoW"] = [[Use: Add a toy to the player's toy collection]],
 
     -- Tooltip parsing -- extracting data from tooltips.

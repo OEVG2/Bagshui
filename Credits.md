@@ -4,7 +4,7 @@
 
 Bagshui started life as a rewrite of EngBags and therefore would not exist without the EngInventory/EngBags developers and maintainers, including (but probably not limited to) Engival, Requital, Hador, UniRing, [Lars Kiesow](https://github.com/lkiesow), [AHHH_REPTAR](https://github.com/ahhh-reptar), [LaYt](https://github.com/laytya), and [Baroque](https://github.com/Brqje).
 
-## OctoWoW Fork
+## WoW 1.18.1 Clients Fork
 
 - Based on Bagshui by [veechs](https://github.com/veechs/Bagshui), continued as [The-Kludge-Bureau/Bagshui](https://github.com/The-Kludge-Bureau/Bagshui), with the 1.5.16 snapshot mirrored by [Dinkleberrrg](https://github.com/Dinkleberrrg/Bagshui).
 - Built on [ClassicAPI](https://github.com/brues-code/ClassicAPI) by [Brues-Code](https://github.com/brues-code).
@@ -50,7 +50,7 @@ Bagshui started life as a rewrite of EngBags and therefore would not exist witho
 ## Docs and tools
 
 - [BLPNG Converter](https://www.wowinterface.com/downloads/info22128-BLPNGConverter.html)
-- [Vanilla](https://github.com/MOUZU/Blizzard-WoW-Interface/tree/master/1.12.1/FrameXML) and [Turtle WoW](https://github.com/refaim/Turtle-WoW-UI-Source/) FrameXML source.
+- [Vanilla](https://github.com/MOUZU/Blizzard-WoW-Interface/tree/master/1.12.1/FrameXML) and [WoW 1.18.1 Clients](https://github.com/refaim/Turtle-WoW-UI-Source/) FrameXML source.
 - Everyone who has ever contributed to the [Warcraft Wiki](https://warcraft.wiki.gg/index.php?title=World_of_Warcraft_API&oldid=567429) (and to [this page about tables and garbage collection](https://warcraft.wiki.gg/wiki/HOWTO:_Use_Tables_Without_Generating_Extra_Garbage) in particular).
 - Basically everything [shagu](https://github.com/shagu) has written, which at times served as de facto documentation.
 

@@ -1,6 +1,6 @@
-## Notable changes (OctoWoW fork)
+## Notable changes (WoW 1.18.1 Clients fork)
 (Warning, Made with AI)
-Fork of **Bagshui 1.5.16** for OctoWoW, modernized for [ClassicAPI](https://github.com/brues-code/ClassicAPI) by Brues-Code.
+Fork of **Bagshui 1.5.16** for WoW 1.18.1 Clients, modernized for [ClassicAPI](https://github.com/brues-code/ClassicAPI) by Brues-Code.
 
 - **Requires ClassicAPI** (`ClassicAPI.dll` loaded through VanillaFixes). Without it, Bagshui disables itself with a chat message and leaves your settings alone.
 - **Multi-account Catalog:** items and gold from your other WoW accounts on the same computer show up in the Catalog and item tooltips, via Nampower's shared file folder. See [Sharing between accounts](#sharing-between-accounts).
@@ -14,7 +14,7 @@ Fork of **Bagshui 1.5.16** for OctoWoW, modernized for [ClassicAPI](https://gith
 <div width="100%">&nbsp;<br></div>
 </h1>
 
-**Feng shui for your bags:** A Vanilla WoW 1.12 (and Turtle WoW) inventory addon.<br><sup>Not for Classic or Retail; you have [so](https://www.curseforge.com/wow/addons/better-bags) [many](https://www.curseforge.com/wow/addons/ark-inventory) [options](https://www.curseforge.com/wow/search?class=addons&categories=bags-inventory&sortBy=popularity).</sup>
+**Feng shui for your bags:** A Vanilla WoW 1.12 (and WoW 1.18.1 Clients) inventory addon.<br><sup>Not for Classic or Retail; you have [so](https://www.curseforge.com/wow/addons/better-bags) [many](https://www.curseforge.com/wow/addons/ark-inventory) [options](https://www.curseforge.com/wow/search?class=addons&categories=bags-inventory&sortBy=popularity).</sup>
 
 <h4><picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/veechs/Bagshui/wiki/images/BagshuiScreenshots.png">
@@ -72,7 +72,7 @@ To check that it's loaded, run `/script DEFAULT_CHAT_FRAME:AddMessage(tostring(C
 
 Bagshui already shares items and gold between the characters on one account. With **Nampower's file functions** it also shares them with your **other accounts on the same computer**: their characters (items, equipped gear and gold) appear in the Catalog, Catalog search and item tooltips, and you can view their bags and bank from the Character menu (read-only).
 
-Setup: in OctoLauncher, enable **Mods → Nampower**. That's it. Check with `/script DEFAULT_CHAT_FRAME:AddMessage(tostring(WriteCustomFile))` (it should print `function`).
+Setup: in your launcher, enable **Mods → Nampower**. That's it. Check with `/script DEFAULT_CHAT_FRAME:AddMessage(tostring(WriteCustomFile))` (it should print `function`).
 
 How it works: each character writes one file (`Bagshui_<Name>_<Realm>.txt`) to the `CustomData` folder, which every client launched from the same install shares, and a short `Bagshui_roster.txt` lists who has one. At startup Bagshui reads the other accounts' files. No scripts, passwords or pairing.
 
@@ -176,7 +176,7 @@ Use [GitAddonsManager](https://woblight.gitlab.io/overview/gitaddonsmanager/).
 <tr>
 <td>
 
-### Turtle WoW
+### WoW 1.18.1 Clients
 
 </td>
 <td>

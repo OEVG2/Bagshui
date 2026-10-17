@@ -376,9 +376,9 @@ Bagshui:AddComponent(function()
           6948, -- Hearthstone
           18986, -- Ultrasafe Transporter: Gadgetzan
           18984, -- Dimensional Ripper - Overlook
-          51313, -- Portable Wormhole Generator: Orgrimmar (Turtle WoW)
-          61000, -- Time-Worn Rune (Turtle WoW)
-          41915, -- Verdant Rune (Turtle WoW)
+          51313, -- Portable Wormhole Generator: Orgrimmar (WoW 1.18.1 Clients)
+          61000, -- Time-Worn Rune (WoW 1.18.1 Clients)
+          41915, -- Verdant Rune (WoW 1.18.1 Clients)
         },
       },
 
@@ -396,7 +396,7 @@ Bagshui:AddComponent(function()
           21213, -- Preserved Holly
           6657, -- Savory Deviate Delight
           17712, -- Winter Veil Disguise Kit
-          50744, -- Winterax Disguise (Turtle WoW)
+          50744, -- Winterax Disguise (WoW 1.18.1 Clients)
         },
         rule = string.format('Name("%s")', L.NameIdentifier_HallowedWand), -- There are multiple Hallowed wands so we'll just use the name here.
       },
@@ -455,7 +455,7 @@ Bagshui:AddComponent(function()
           15138, -- Onyxia Scale Cloak
           21986, -- Banner of Provocation
           22014, -- Hallowed Brazier
-          50545, -- Gemstone of Ysera (Turtle WoW).
+          50545, -- Gemstone of Ysera (WoW 1.18.1 Clients).
         },
       },
 
@@ -510,7 +510,7 @@ Bagshui:AddComponent(function()
               17035, -- Stranglethorn Seed
               17021, -- Wild Berries
               17026, -- Wild Thornroot
-              61199, -- Bright Dream Shard (Turtle WoW)
+              61199, -- Bright Dream Shard (WoW 1.18.1 Clients)
             },
           },
           HUNTER = {
@@ -627,7 +627,7 @@ Bagshui:AddComponent(function()
         ),
       },
 
-      -- Turtle WoW Glyphs.
+      -- WoW 1.18.1 Clients glyphs.
       -- TW classifies their glyphs as keys.
       {
         id = "TWGlyphs",

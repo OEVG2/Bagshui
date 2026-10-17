@@ -35,7 +35,7 @@ body:
   - type: input
     attributes:
       label: Server
-      description: "What WoW server are you playing on? (i.e. Turtle WoW, etc.)<br>*This is important because some servers have custom items.*"
+      description: "What WoW server are you playing on? (i.e. WoW 1.18.1 Clients, etc.)<br>*This is important because some servers have custom items.*"
     validations:
       required: true
   - type: textarea

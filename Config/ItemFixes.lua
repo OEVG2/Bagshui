@@ -39,7 +39,7 @@ Bagshui:LoadComponent(function()
     [13180] = { type = "Trade Goods", subtype = "Explosives" }, -- Stratholme Holy Water (it is a Quest Item, but the ActiveQuest() rule will catch them when they're actually an objective).
 
     -- Quest Items
-    [15874] = { type = "Quest", subtype = "Quest" }, -- Soft-Shelled Clams aren't keys (this might just be a Turtle WoW issue).
+    [15874] = { type = "Quest", subtype = "Quest" }, -- Soft-Shelled Clams aren't keys (this might just be a WoW 1.18.1 Clients issue).
     [61793] = { type = "Quest", subtype = "Quest" }, -- Arena Marks of Honor aren't junk and there's no Vanilla "Currency" type.
 
     -- Bindable book pages for quests (previously Miscellaneous/Junk).

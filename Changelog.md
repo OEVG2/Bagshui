@@ -40,7 +40,7 @@
 
 ## 1.6.0-octo.1 - 2026-10-16
 
-Fork of Bagshui 1.5.16 (last Vanilla/Turtle release of The-Kludge-Bureau/Bagshui) for OctoWoW, built on [ClassicAPI](https://github.com/brues-code/ClassicAPI) by Brues-Code.
+Fork of Bagshui 1.5.16 (last Vanilla release of The-Kludge-Bureau/Bagshui) for WoW 1.18.1 Clients, built on [ClassicAPI](https://github.com/brues-code/ClassicAPI) by Brues-Code.
 
 ### Fixed
 
@@ -71,7 +71,7 @@ Fork of Bagshui 1.5.16 (last Vanilla/Turtle release of The-Kludge-Bureau/Bagshui
 ### Fixed
 
 - _Actually_ fix [empty slot backgrounds in non-enUS clients that don't have a Bagshui localization](https://github.com/veechs/Bagshui/issues/175) (was working in 1.5.13, but only due to the bug that was resolved in 1.5.14). <sup><small>🪲&nbsp;[@Trust-WoW](https://github.com/Trust-WoW)</small></sup>
-- _Actually_ move Turtle WoW's **Verdant Rune** [to the Teleports Category](https://github.com/veechs/Bagshui/issues/179). <sup><small>🗃️&nbsp;[@xeropresence](https://github.com/xeropresence)</small></sup>
+- _Actually_ move WoW 1.18.1 Clients' **Verdant Rune** [to the Teleports Category](https://github.com/veechs/Bagshui/issues/179). <sup><small>🗃️&nbsp;[@xeropresence](https://github.com/xeropresence)</small></sup>
 
 ## 1.5.14 - 2025-08-23
 
@@ -86,13 +86,13 @@ Fork of Bagshui 1.5.16 (last Vanilla/Turtle release of The-Kludge-Bureau/Bagshui
 - Empty slot backgrounds in non-enUS clients that don't have a Bagshui localization [shouldn't go on vacation anymore](https://github.com/veechs/Bagshui/issues/175). <sup><small>🪲&nbsp;[@Trust-WoW](https://github.com/Trust-WoW)</small></sup>
 - Prevent [an error](https://github.com/veechs/Bagshui/issues/177) during the bank slot purchase flow. <sup><small>🪲&nbsp;[@Arcitec](https://github.com/Arcitec)</small></sup>
 - Fix for [rare occurrence of missing toolbars](https://github.com/veechs/Bagshui/issues/172). <sup><small>🪲&nbsp;[@Sleepybear](https://github.com/Sleepybear)</small></sup>
-- Turtle WoW's **Verdant Rune** is now [correctly placed in the Teleports Category](https://github.com/veechs/Bagshui/issues/179). <sup><small>🗃️&nbsp;[@xeropresence](https://github.com/xeropresence)</small></sup>
+- WoW 1.18.1 Clients' **Verdant Rune** is now [correctly placed in the Teleports Category](https://github.com/veechs/Bagshui/issues/179). <sup><small>🗃️&nbsp;[@xeropresence](https://github.com/xeropresence)</small></sup>
 
 ## 1.5.12 - 2025-08-20
 
 ### Fixed
 
-- The new "Concoctions" in Turtle WoW 1.18 are now [correctly categorized with elixirs](https://github.com/veechs/Bagshui/issues/173). <sup><small>🗃️&nbsp;[@xeropresence](https://github.com/xeropresence) + [@Sunelegy](https://github.com/Sunelegy) for zhCN</small></sup>
+- The new "Concoctions" in WoW 1.18.1 Clients are now [correctly categorized with elixirs](https://github.com/veechs/Bagshui/issues/173). <sup><small>🗃️&nbsp;[@xeropresence](https://github.com/xeropresence) + [@Sunelegy](https://github.com/Sunelegy) for zhCN</small></sup>
 
 ## 1.5.11 - 2025-08-04
 
@@ -129,7 +129,7 @@ Fork of Bagshui 1.5.16 (last Vanilla/Turtle release of The-Kludge-Bureau/Bagshui
 ### Fixed
 
 - Prevent [doubled cooldown text](https://github.com/veechs/Bagshui/issues/143) when ShaguPlates, ShaguTweaks, and pfQuest are enabled. Thanks to [@shagu](https://github.com/shagu) for identifying the cause and suggesting how to fix it. <sup><small>🪲&nbsp;[@Vymya](https://github.com/Vymya)</small></sup>
-- Capture custom Turtle WoW recipes that are [wrongly categorized on the server side](https://github.com/veechs/Bagshui/issues/144). <sup><small>🗃️&nbsp;[@Szalor](https://github.com/Szalor)</small></sup>
+- Capture custom WoW 1.18.1 Clients recipes that are [wrongly categorized on the server side](https://github.com/veechs/Bagshui/issues/144). <sup><small>🗃️&nbsp;[@Szalor](https://github.com/Szalor)</small></sup>
 
 ## 1.5.4 - 2025-04-12
 
@@ -185,7 +185,7 @@ Fork of Bagshui 1.5.16 (last Vanilla/Turtle release of The-Kludge-Bureau/Bagshui
 
 ### Fixed
 
-- Mounts, companions, and toys should all be [correctly categorized now](https://github.com/veechs/Bagshui/issues/116) on both Turtle WoW and true Vanilla. Thanks as always to [@Sunelegy](https://github.com/Sunelegy) for zhCN guidance.<sup><small>🗃️ [@jilinge2](https://github.com/jilinge2)</small></sup>
+- Mounts, companions, and toys should all be [correctly categorized now](https://github.com/veechs/Bagshui/issues/116) on both WoW 1.18.1 Clients and true Vanilla. Thanks as always to [@Sunelegy](https://github.com/Sunelegy) for zhCN guidance.<sup><small>🗃️ [@jilinge2](https://github.com/jilinge2)</small></sup>
 - Attempt to protect against [rare errors during sorting](https://github.com/veechs/Bagshui/issues/127). <sup><small>🪲&nbsp;bonho</small></sup>
 
 ## 1.4.10 - 2025-03-28
@@ -493,7 +493,7 @@ _The [Info Tooltip Taming](https://github.com/veechs/Bagshui/milestone/2?closed=
 
 ### Changed
 
-- Add `Transmog()` [rule function](https://github.com/veechs/Bagshui/wiki/Rules) stub to support Turtle transmog collection data via [Bagshui-Tmog](https://github.com/veechs/Bagshui-Tmog). <sup><small>🫶&nbsp;Tyrchast</small></sup>
+- Add `Transmog()` [rule function](https://github.com/veechs/Bagshui/wiki/Rules) stub to support transmog collection data via [Bagshui-Tmog](https://github.com/veechs/Bagshui-Tmog). <sup><small>🫶&nbsp;Tyrchast</small></sup>
 - Internal rework of rule function management.
 - Refactor [3rd party API](https://github.com/veechs/Bagshui/wiki/Developers:-API).
 
@@ -527,7 +527,7 @@ _The [Info Tooltip Taming](https://github.com/veechs/Bagshui/milestone/2?closed=
 
 - [Window scale setting added](https://github.com/veechs/Bagshui/issues/4). <sup><small>🫶&nbsp;[mmrosh](https://github.com/mrrosh)</small></sup>
 - Adjust default categories: <sup><small>🗃️&nbsp;[@melba](https://github.com/melbaa)</small></sup>
-  - Add Turtle WoW items to Teleport and decrease sequence number to run before Soulbound.
+  - Add WoW 1.18.1 Clients items to Teleport and decrease sequence number to run before Soulbound.
   - Add missing Anti-Venoms to First Aid (formerly Bandages).
 
 ## 1.0.3 - 2024-12-30

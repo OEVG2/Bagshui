@@ -5,7 +5,7 @@ Here’s how you can get involved and help make Bagshui better!
 ## Bug reports and feature requests
 
 - Report bugs and request features for this fork on this repository's **Issues** tab. Please include your ClassicAPI version (`/script DEFAULT_CHAT_FRAME:AddMessage(tostring(CLASSIC_API_VERSION))`).
-- Problems that also happen on Vanilla/Turtle WoW without ClassicAPI may belong [upstream](https://github.com/veechs/Bagshui/issues) instead.
+- Problems that also happen on Vanilla / WoW 1.18.1 Clients without ClassicAPI may belong [upstream](https://github.com/veechs/Bagshui/issues) instead.
 
 ## Code changes
 

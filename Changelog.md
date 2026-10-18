@@ -1,5 +1,11 @@
 # Bagshui Changelog
 
+## 1.6.0-octo.9 - 2026-10-17
+
+### Fixed
+
+- Addons that walk through every frame (such as FpsWatch's combat profiler) could freeze the game, because Bagshui's helper proxy frames for item buttons made that walk loop forever. The proxies are now plain tables instead of real frames, which also removes two frames per item slot.
+
 ## 1.6.0-octo.8 - 2026-10-17
 
 ### Changed

@@ -134,12 +134,18 @@ Bagshui:AddComponent(function()
 
     -- Proxy for `slotButton` that was created above.
     -- Will override `GetID()` and `GetParent()`.
-    local slotButtonProxy = _G.CreateFrame("Button")
+    --
+    -- This is deliberately a plain table, NOT a frame made with CreateFrame(). Its `[0]` is pointed at
+    -- another frame's userdata (below), and EnumerateFrames() follows `[0]`: a real proxy frame would send
+    -- any addon that walks every frame back to the item button forever, freezing the game.
+    -- Frame methods only need `[0]`, so a table with `[0]` works the same.
+    local slotButtonProxy = {}
     -- Store the proxy so it can be used by `Inventory:ItemButton_OnClick/OnEnter()`
     slotButton.bagshuiData.getIdProxy = slotButtonProxy
     -- Proxy for `slotButton`'s parent frame.
     -- Will override `GetID()` only.
-    local parentProxy = _G.CreateFrame("Frame")
+    -- (Also a plain table, for the same reason as `slotButtonProxy`.)
+    local parentProxy = {}
     -- Reference to `slotButton`'s actual parent frame, updated
     -- by `getItemButtonParent()`.
     local realParent
@@ -156,7 +162,8 @@ Bagshui:AddComponent(function()
     local function getItemButtonParent(_)
       realParent = slotButton:GetParent()
       -- Update userdata property of proxy frame.
-      parentProxy[0] = realParent[0]
+      -- rawset() because the proxy has no `[0]` of its own and `__newindex` would redirect the write.
+      rawset(parentProxy, 0, realParent[0])
       return parentProxy
     end
 
@@ -184,7 +191,8 @@ Bagshui:AddComponent(function()
     setmetatable(slotButtonProxy, slotButtonMetatable)
     -- Redirect frame userdata to avoid errors.
     -- Credit: https://www.wowinterface.com/forums/showthread.php?t=53928
-    slotButtonProxy[0] = slotButton[0]
+    -- rawset() because the proxy has no `[0]` of its own and `__newindex` would redirect the write.
+    rawset(slotButtonProxy, 0, slotButton[0])
 
     -- Metatable that makes `parentProxy` work.
     local parentMetatable = {

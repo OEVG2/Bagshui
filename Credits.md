@@ -8,6 +8,8 @@ Bagshui started life as a rewrite of EngBags and therefore would not exist witho
 
 - Based on Bagshui by [veechs](https://github.com/veechs/Bagshui), continued as [The-Kludge-Bureau/Bagshui](https://github.com/The-Kludge-Bureau/Bagshui), with the 1.5.16 snapshot mirrored by [Dinkleberrrg](https://github.com/Dinkleberrrg/Bagshui).
 - Built on [ClassicAPI](https://github.com/brues-code/ClassicAPI) by [Brues-Code](https://github.com/brues-code).
+- Cross-account sharing is inspired by [Bagertz](https://github.com/Salahaja/Bagertz) by [Salahaja](https://github.com/Salahaja), which shares item counts between accounts through the same Nampower `CustomData` folder.
+- The per-bag hide option was inspired by [GudaBags](https://github.com/GudaLegacy/GudaBags) and its 1.12 version, [Guda](https://github.com/vatichild/guda) by [vatichild](https://github.com/vatichild).
 - Reviewed [Salahaja/Bagshui](https://github.com/Salahaja/Bagshui) for fixes; its quest log selection fix is already in 1.5.16.
 - Like Bagshui? Consider supporting the original author, [veechs](https://www.buymeacoffee.com/veechs).
 

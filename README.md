@@ -22,18 +22,18 @@ A fork of **Bagshui 1.5.16** for WoW 1.18.1 Clients, built on [ClassicAPI](https
 ## Features
 
 - Single-window inventory for Bags, Bank, and Keyring.
-- [Customizable layout and design](https://github.com/veechs/Bagshui/wiki/Profiles) with automatic grouping and sorting.
-- [Categorization](https://github.com/veechs/Bagshui/wiki/Categories) via [rules](https://github.com/veechs/Bagshui/wiki/Rules) and item lists.
-- Per-inventory and account-wide [search](https://github.com/veechs/Bagshui/wiki/Searching).
-- Offline viewing of any character’s inventory and [item counts in tooltips](https://github.com/veechs/Bagshui/wiki/Item-Information#info-tooltip).
-- Identification of [profession reagents and crafted items](https://github.com/veechs/Bagshui/wiki/Professions).<br><sup>Updated when the crafting window is opened.</sup>
+- [Customizable layout and design](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/Profiles) with automatic grouping and sorting.
+- [Categorization](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/Categories) via [rules](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/Rules) and item lists.
+- Per-inventory and account-wide [search](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/Searching).
+- Offline viewing of any character’s inventory and [item counts in tooltips](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/Item-Information#info-tooltip).
+- Identification of [profession reagents and crafted items](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/Professions).<br><sup>Updated when the crafting window is opened.</sup>
 - Color tinting of unusable items.
 - Badges to indicate stock changes, quality, quest items, and unusability.
 - Empty slot stacking and custom graphics for profession bag slots.
 - Automated bag swapping – no more manual item shuffling!
 - Selling protection to safeguard valuable items.
 - Clam (Open Container), Disenchant, Pick Lock, and Hearthstone buttons.
-- [Colorblind mode](https://github.com/veechs/Bagshui/wiki/Accessibility#colorblind-mode) to help identify item quality and unusability.
+- [Colorblind mode](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/Accessibility#colorblind-mode) to help identify item quality and unusability.
 - Plenty of other little niceties like item restacking, pfUI skinning, and more.
 
 <details>
@@ -41,16 +41,16 @@ A fork of **Bagshui 1.5.16** for WoW 1.18.1 Clients, built on [ClassicAPI](https
 <summary>Recommended if you like…</summary>
 
 > AdiBags, ArkInventory, Baganator, Baggins, BetterBags, EngInventory/EngBags, TBag.
-> And with “[OneBagshui](https://github.com/veechs/Bagshui/wiki/FAQ#how-do-i-switch-to-the-onebag-style-layout)”: Bagnon, Combuctor, Inventorian, LiteBag, OneBag3, SUCC-bag.
+> And with “[OneBagshui](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/FAQ#how-do-i-switch-to-the-onebag-style-layout)”: Bagnon, Combuctor, Inventorian, LiteBag, OneBag3, SUCC-bag.
 
 </details>
 
 ## Documentation
 
 ⬇️ [Installation](#installation)
-📕 [Wiki](https://github.com/veechs/Bagshui/wiki) <sup>(upstream Bagshui; applies to this fork except as noted in the [Changelog](Changelog.md))</sup>
-🙋 [FAQ](https://github.com/veechs/Bagshui/wiki/FAQ)
-🐾 [Walkthroughs](https://github.com/veechs/Bagshui/wiki/Walkthroughs)
+📕 [Wiki](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki) <sup>(upstream Bagshui; applies to this fork except as noted in the [Changelog](Changelog.md))</sup>
+🙋 [FAQ](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/FAQ)
+🐾 [Walkthroughs](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/Walkthroughs)
 🕝 [Changelog](Changelog.md)
 
 ## Requirements
@@ -123,7 +123,7 @@ Inspired by [Bagertz](https://github.com/Salahaja/Bagertz) (tooltip counts acros
 - Blizzard UI
 - [aux](https://github.com/gwetchen/aux-addon)
 - [Mail](https://github.com/EinBaum/Mail)
-- [Postal Returned](https://github.com/veechs/Postal-Returned) / Postal / CT_MailMod
+- [Postal Returned](https://web.archive.org/web/20250622152236/https://github.com/veechs/Postal-Returned) / Postal / CT_MailMod
 
 </td>
 </tr>
@@ -161,7 +161,7 @@ Inspired by [Bagertz](https://github.com/Salahaja/Bagertz) (tooltip counts acros
 <tr>
 <td>
 
-### [Rule functions](https://github.com/veechs/Bagshui/wiki/Rules#available-rule-functions)
+### [Rule functions](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/Rules#available-rule-functions)
 
 </td>
 <td>
@@ -181,7 +181,7 @@ Inspired by [Bagertz](https://github.com/Salahaja/Bagertz) (tooltip counts acros
 <td>
 
 - **Guild Bank** right-click to deposit.
-- [`Transmog()`](https://github.com/veechs/Bagshui/wiki/Rules#available-rule-functions) collection queries.<br><sup>Requires [Tmog](https://github.com/Otari98/Tmog) and [Bagshui-Tmog](https://github.com/veechs/Bagshui-Tmog).
+- [`Transmog()`](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/Rules#available-rule-functions) collection queries.<br><sup>Requires [Tmog](https://github.com/Otari98/Tmog) and [Bagshui-Tmog](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui-Tmog).
 
 </td>
 </tr>

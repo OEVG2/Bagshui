@@ -256,6 +256,20 @@ Bagshui:AddComponent(function()
 
         local hasBag = inventory:BagSlotButtonHasBag(this)
 
+        -- Right-click or Ctrl+Click: hide/show the items in this bag.
+        -- (Never when something is on the cursor, so bag swapping and item placing still work.)
+        if
+          (_G.arg1 == "RightButton" or _G.IsControlKeyDown())
+          and not _G.CursorHasItem()
+          and not inventory.editMode
+          and Bagshui.config.HideBagSettings[bagNum]
+        then
+          local settingName = Bagshui.config.HideBagSettings[bagNum]
+          inventory.settings[settingName] = not inventory.settings[settingName]
+          inventory:UpdateBagBar()
+          return
+        end
+
         -- Alt-click highlight lock.
         if
           hasBag
@@ -581,6 +595,20 @@ Bagshui:AddComponent(function()
                 and L.Unlock
               or L.Lock
           )
+        ),
+        GRAY_FONT_COLOR.r,
+        GRAY_FONT_COLOR.g,
+        GRAY_FONT_COLOR.b
+      )
+    end
+
+    -- Add hint about hiding/showing the bag's items (not for the primary containers, which can't be hidden).
+    if not self.editMode and Bagshui.config.HideBagSettings[this.bagshuiData.bagNum] then
+      _G.GameTooltip:AddLine(
+        string.format(
+          L.Tooltip_Inventory_ToggleBagHiddenHint,
+          L.RightClick .. " / " .. L.CtrlClick,
+          string.lower(self:IsBagHidden(this.bagshuiData.bagNum) and L.Show or L.Hide)
         ),
         GRAY_FONT_COLOR.r,
         GRAY_FONT_COLOR.g,

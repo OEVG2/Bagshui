@@ -1,5 +1,11 @@
 # Bagshui Changelog
 
+## 1.6.0-octo.10 - 2026-10-18
+
+### Added
+
+- **Hide a bag's items:** right-click (or Ctrl+Click) a bag button in the bag bar to hide everything in that bag, such as profession bags, quivers, ammo pouches or soul bags. The bag's icon is dimmed while hidden. The setting is saved per character and works on every bag except the Backpack, the main Bank container and the Keyring. Hidden items come back with **Show Hidden** (or while the bag's highlight is locked), and empty slots in hidden bags aren't counted in the empty-slot stacks. Idea from GudaBags.
+
 ## 1.6.0-octo.9 - 2026-10-17
 
 ### Fixed

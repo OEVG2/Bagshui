@@ -1471,6 +1471,29 @@ Bagshui:AddComponent(function()
     },
   }
 
+  -- Per-bag "hide this bag's items" settings. Toggled by right-clicking (or Ctrl+Clicking) a bag button.
+  -- Stored per character. The primary containers (Backpack, Bank, Keyring) can't be hidden.
+  -- `Bagshui.config.HideBagSettings` maps container ID => setting name.
+  Bagshui.config.HideBagSettings = {}
+  for _, inventoryType in ipairs(BS_INVENTORY_TYPE_UI_ORDER) do
+    local inventoryConfig = Bagshui.config.Inventory[inventoryType]
+    local primaryId = inventoryConfig.primaryContainer and inventoryConfig.primaryContainer.id
+    for _, containerId in ipairs(inventoryConfig.containerIds) do
+      if containerId ~= primaryId then
+        local settingName = "hideBag" .. containerId
+        Bagshui.config.HideBagSettings[containerId] = settingName
+        table.insert(Bagshui.config.Settings, {
+          name = settingName,
+          scope = BS_SETTING_SCOPE.CHARACTER,
+          type = BS_SETTING_TYPE.BOOLEAN,
+          hidden = true,
+          defaultValue = false,
+          inventoryResortOnChange = true,
+        })
+      end
+    end
+  end
+
   -- Change defaults for specific inventory types here.
   -- Only `<settingName> = <value>` is needed, not the entire settings table.
   ---@type table<BS_INVENTORY_TYPE, table<string, any>>

@@ -58,6 +58,7 @@ Bagshui:LoadComponent(function()
     ["AddSlashRemove"] = "Add/Remove",
     ["Aliases"] = "Aliases",
     ["AltClick"] = "Alt+Click",
+    ["CtrlClick"] = "Ctrl+Click",
     ["AltRightClick"] = "Alt+Right-Click",
     ["Ascending"] = "Ascending",
     ["Available"] = "Available",
@@ -309,6 +310,7 @@ Bagshui:LoadComponent(function()
 
     -- Action Tooltips.
     ["Tooltip_Inventory_PlaceBagInBagHint"] = "%s to move into bag instead of swapping.", -- "Shift-Click to lock/unlock slot highlighting"
+    ["Tooltip_Inventory_ToggleBagHiddenHint"] = "%s to %s this bag's items.", -- "Right-Click / Ctrl+Click to hide/show this bag's items"
     ["Tooltip_Inventory_ToggleBagSlotHighlightLockHint"] = "%s to %s slot highlighting.", -- "Alt-Click to lock/unlock slot highlighting"
     ["Tooltip_Inventory_ToggleEmptySlotStacking"] = "%s to %s empty slots.", -- "Click to stack/unstack empty slots"
     ["Tooltip_Inventory_TradeShortcut"] = "%s to trade with %s.", -- "Alt-Click to trade with <Player Name>"

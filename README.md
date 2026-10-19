@@ -3,6 +3,7 @@
 Fork of **Bagshui 1.5.16** for WoW 1.18.1 Clients, modernized for [ClassicAPI](https://github.com/brues-code/ClassicAPI) by Brues-Code.
 
 - **Requires ClassicAPI** (`ClassicAPI.dll` loaded through VanillaFixes). Without it, Bagshui disables itself with a chat message and leaves your settings alone.
+- **Hide a bag's items:** right-click (or Ctrl+Click) a bag button to hide everything in it (profession bags, quivers, soul bags...). Saved per character; **Show Hidden** brings them back.
 - **Multi-account Catalog:** items and gold from your other WoW accounts on the same computer show up in the Catalog and item tooltips, via Nampower's shared file folder. See [Sharing between accounts](#sharing-between-accounts).
 - Drop-in replacement for upstream: same `Bagshui` folder and `BagshuiData` SavedVariables. Do not run both.
 - See [Changelog](Changelog.md) for details.

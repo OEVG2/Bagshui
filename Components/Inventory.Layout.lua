@@ -1259,6 +1259,7 @@ self.settings.showBagBar and (uiButtons.itemSlots[1].bagshuiData.originalSizeAdj
       local step = -1
       local item = nil
       local hideItem = false
+      local bagIsHidden = false
       for position = firstItem, lastItem, step do
         -- Grab the item info.
         item = self.groupItems[groupId][position]
@@ -1268,8 +1269,13 @@ self.settings.showBagBar and (uiButtons.itemSlots[1].bagshuiData.originalSizeAdj
         hideItem = false
         isEmptySlotStack = false
 
+        -- Items (and empty slots) in bags the user has hidden.
+        bagIsHidden = self:IsBagHiddenInLayout(item.bagNum)
+
+        if bagIsHidden then
+          hideItem = true
         -- Empty slot stacking.
-        if
+        elseif
           self.emptySlotStackingAllowed -- Empty slot stacking must be on.
           and item.emptySlot == 1 -- This item must be an empty slot.
           and not item._bagshuiPreventEmptySlotStack -- This slot must not be temporarily blocked from stacking (usually if it just became empty and re-sorting hasn't occurred yet).
@@ -1371,12 +1377,35 @@ self.settings.showBagBar and (uiButtons.itemSlots[1].bagshuiData.originalSizeAdj
     end
   end
 
+  --- Has the user hidden this bag's items (right-click or Ctrl+Click on its bag button)?
+  ---@param bagNum number
+  ---@return boolean
+  function Inventory:IsBagHidden(bagNum)
+    local settingName = Bagshui.config.HideBagSettings[bagNum]
+    return settingName ~= nil and self.settings[settingName] == true
+  end
+
+  --- Should this bag's items be left out of the window right now?
+  --- Same exceptions as individually hidden items: Edit Mode, Show Hidden, and a locked bag highlight.
+  ---@param bagNum number
+  ---@return boolean
+  function Inventory:IsBagHiddenInLayout(bagNum)
+    return not self.editMode
+      and not self.showHidden
+      and self.highlightItemsInContainerLocked ~= bagNum
+      and self:IsBagHidden(bagNum)
+  end
+
   --- Determine whether a slot is empty, and if so, add 1 to the appropriate per-bag-type empty slot stack.
   ---@param item table Bagshui inventory cache entry.
   ---@return boolean # true if the item is an empty slot.
   function Inventory:UpdateEmptySlotStackCount(item)
     -- Only increment the count for slots that are empty AND not temporarily prevented from stacking.
     if item.emptySlot == 1 and not item._bagshuiPreventEmptySlotStack then
+      -- Empty slots in bags the user has hidden don't count toward any stack.
+      if self:IsBagHiddenInLayout(item.bagNum) then
+        return true
+      end
       -- genericType SHOULD be filled in, but let's just be sure.
       local genericBagType = self.containers[item.bagNum].genericType or BsGameInfo.itemSubclasses.Container.Bag
       -- Increment the count.
@@ -1426,7 +1455,12 @@ self.settings.showBagBar and (uiButtons.itemSlots[1].bagshuiData.originalSizeAdj
       end
 
       -- Empty slot stacks and hidden items.
-      if self:UpdateEmptySlotStackCount(item) then
+      if self:IsBagHiddenInLayout(item.bagNum) then
+        -- This item is in a bag the user has hidden. Mark that hidden items exist so the
+        -- toolbar's Show Hidden button is enabled.
+        self.hasHiddenItems = true
+        itemVisible = false
+      elseif self:UpdateEmptySlotStackCount(item) then
         -- This is an empty slot stack, which we know because in addition to
         -- updating the appropriate empty slot stack proxy item in self.emptySlotsStacks,
         -- UpdateEmptySlotStackCount() returns true if the given item is an empty slot.
@@ -1753,6 +1787,8 @@ self.settings.showBagBar and (uiButtons.itemSlots[1].bagshuiData.originalSizeAdj
         BS_COLOR.ITEM_SLOT_STATE_NORMAL[2],
         BS_COLOR.ITEM_SLOT_STATE_NORMAL[3],
         (not self.online and BsSkin.itemSlotTextureOfflineOpacity or 1)
+          -- Dim bags whose items are hidden.
+          * (self:IsBagHidden(bagSlotButton.bagshuiData.bagNum) and 0.4 or 1)
       )
 
       -- Overall button opacity.

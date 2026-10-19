@@ -8,10 +8,6 @@
 
 **Feng shui for your bags:** A Vanilla WoW 1.12 (and WoW 1.18.1 Clients) inventory addon.<br><sup>Not for Classic or Retail; you have [so](https://www.curseforge.com/wow/addons/better-bags) [many](https://www.curseforge.com/wow/addons/ark-inventory) [options](https://www.curseforge.com/wow/search?class=addons&categories=bags-inventory&sortBy=popularity).</sup>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/veechs/Bagshui/wiki/images/BagshuiScreenshots.png">
-  <img src="https://github.com/veechs/Bagshui/wiki/images/BagshuiScreenshots.png" alt="Bagshui screenshots">
-</picture>
 
 ## About this fork
 

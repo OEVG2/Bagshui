@@ -1,5 +1,11 @@
 # Bagshui Changelog
 
+## 1.6.0-octo.11 - 2026-10-18
+
+### Fixed
+
+- Hiding a bag with right-click or Ctrl+Click failed with "Invalid setting hideBag4" because the per-bag settings weren't registered. They are now.
+
 ## 1.6.0-octo.10 - 2026-10-18
 
 ### Added

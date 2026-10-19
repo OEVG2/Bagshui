@@ -1482,7 +1482,8 @@ Bagshui:AddComponent(function()
       if containerId ~= primaryId then
         local settingName = "hideBag" .. containerId
         Bagshui.config.HideBagSettings[containerId] = settingName
-        table.insert(Bagshui.config.Settings, {
+        -- Settings are only registered from the INVENTORY applicability list (see Settings:Init()).
+        table.insert(Bagshui.config.Settings[BS_SETTING_APPLICABILITY.INVENTORY], {
           name = settingName,
           scope = BS_SETTING_SCOPE.CHARACTER,
           type = BS_SETTING_TYPE.BOOLEAN,

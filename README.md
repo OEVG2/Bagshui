@@ -48,7 +48,7 @@ A fork of **Bagshui 1.5.16** for WoW 1.18.1 Clients, built on [ClassicAPI](https
 ## Documentation
 
 ⬇️ [Installation](#installation)
-📕 [Wiki](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki) <sup>(upstream Bagshui; applies to this fork except as noted in the [Changelog](Changelog.md))</sup>
+📕 [Wiki](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki)
 🙋 [FAQ](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/FAQ)
 🐾 [Walkthroughs](https://web.archive.org/web/20250622152236/https://github.com/veechs/Bagshui/wiki/Walkthroughs)
 🕝 [Changelog](Changelog.md)

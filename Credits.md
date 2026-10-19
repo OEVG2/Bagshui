@@ -20,7 +20,7 @@ Bagshui started life as a rewrite of EngBags and therefore would not exist witho
 - balakethelock's [SuperWoW](https://github.com/balakethelock/SuperWoW) inspired Bagshui's native item charges support (and is used if installed instead of parsing tooltips).
 
 - Huge thanks those who have undertaken the sizable task of translation!
-  - [@Sunelegy](https://github.com/Sunelegy) - zhCN
+  - [@Sunelegy](https://github.com/Sunelegy) - zhCN (no longer included in this fork)
 
 - My long-suffering alpha tester, who put up with me spending more time developing Bagshui than actually playing the game. 🩷
 

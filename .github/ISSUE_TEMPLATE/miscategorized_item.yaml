@@ -17,7 +17,7 @@ body:
   - type: input
     attributes:
       label: Locale (Language)
-      description: "`enUS`, `zhCN`, etc.<br>To find your locale, use this chat command in-game: <code>/run DEFAULT_CHAT_FRAME:AddMessage(GetLocale())</code><br>*Some categorizations are locale-dependent and the localization may need updating.*"
+      description: "`enUS`, `deDE`, etc.<br>To find your locale, use this chat command in-game: <code>/run DEFAULT_CHAT_FRAME:AddMessage(GetLocale())</code><br>*Some categorizations are locale-dependent and the localization may need updating.*"
     validations:
       required: true
   - type: input

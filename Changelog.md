@@ -9,6 +9,10 @@ First stable release. The earlier 1.6.0-octo.N builds were betas; their notes ar
 - **Hide a bag's items:** right-click or Ctrl+Click a bag icon to hide or show everything in that bag (inventory and bank). Saved per character; Show Hidden and Edit Mode reveal hidden items.
 - **Cross-account sharing** of the Catalog, gold, equipped gear and full inventories between accounts on the same computer (requires Nampower).
 
+### Removed
+
+- The Chinese (zhCN) translation. This fork supports English only. Other clients fall back to English.
+
 ### Fixed
 
 - Freeze when a frame-scanning profiler such as FpsWatch ran with Bagshui loaded.

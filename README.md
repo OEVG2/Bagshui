@@ -197,7 +197,6 @@ Inspired by [Bagertz](https://github.com/Salahaja/Bagertz) (tooltip counts acros
 If Bagshui has not been localized for your client, many items will not be correctly identified by the built-in categorization[^1]. Please consider [contributing a translation](Locale/Readme.md) if you'd like to have full functionality!
 
 - English (enUS)
-- Chinese (zhCN)
 
 [^1]: In Vanilla, a _lot_ of item identification must be done either by parsing tooltips or hardcoding item IDs. Bagshui leans toward the former, and therefore is highly dependent on localization.
 

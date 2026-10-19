@@ -65,7 +65,7 @@ Without ClassicAPI, Bagshui prints a message in chat and disables itself (your s
 
 To check that it's loaded, run `/script DEFAULT_CHAT_FRAME:AddMessage(tostring(CLASSIC_API_VERSION))` in game. A number means it is.
 
-**Optional:** [Nampower](https://github.com/pepopo978/nampower) enables [sharing between accounts](#sharing-between-accounts). Without it, everything else works normally.
+**Optional:** [Nampower](https://github.com/brues-code/nampower) enables [sharing between accounts](#sharing-between-accounts). Without it, everything else works normally.
 
 ## Installation
 

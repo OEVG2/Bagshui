@@ -2,7 +2,7 @@
 
 ## 1.6.1 - 2026-10-19
 
-First release under the plain version format (earlier fork builds were numbered 1.6.0-octo.N; their notes are kept below).
+First stable release. The earlier 1.6.0-octo.N builds were betas; their notes are kept below.
 
 ### Added
 

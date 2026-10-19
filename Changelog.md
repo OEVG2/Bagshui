@@ -1,5 +1,19 @@
 # Bagshui Changelog
 
+## 1.6.1 - 2026-10-19
+
+First release under the plain version format (earlier fork builds were numbered 1.6.0-octo.N; their notes are kept below).
+
+### Added
+
+- **Hide a bag's items:** right-click or Ctrl+Click a bag icon to hide or show everything in that bag (inventory and bank). Saved per character; Show Hidden and Edit Mode reveal hidden items.
+- **Cross-account sharing** of the Catalog, gold, equipped gear and full inventories between accounts on the same computer (requires Nampower).
+
+### Fixed
+
+- Freeze when a frame-scanning profiler such as FpsWatch ran with Bagshui loaded.
+- Hitching from the shared-data writer, which now writes in small staged steps and skips unchanged data.
+
 ## 1.6.0-octo.12 - 2026-10-18
 
 ### Fixed

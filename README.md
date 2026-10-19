@@ -1,14 +1,5 @@
-## Notable changes (WoW 1.18.1 Clients fork)
+# Bagshui for WoW 1.18.1 Clients
 (Warning, Made with AI)
-Fork of **Bagshui 1.5.16** for WoW 1.18.1 Clients, modernized for [ClassicAPI](https://github.com/brues-code/ClassicAPI) by Brues-Code.
-
-- **Requires ClassicAPI** (`ClassicAPI.dll` loaded through VanillaFixes). Without it, Bagshui disables itself with a chat message and leaves your settings alone.
-- **Hide a bag's items:** right-click (or Ctrl+Click) a bag button to hide everything in it (profession bags, quivers, soul bags...). Saved per character; **Show Hidden** brings them back.
-- **Multi-account Catalog:** items and gold from your other WoW accounts on the same computer show up in the Catalog and item tooltips, via Nampower's shared file folder. See [Sharing between accounts](#sharing-between-accounts).
-- Drop-in replacement for upstream: same `Bagshui` folder and `BagshuiData` SavedVariables. Do not run both.
-- See [Changelog](Changelog.md) for details.
-
----
 
 <h1>
 <img src="Images/Logo.svg" width="204" align="left" alt="Bagshui">
@@ -17,12 +8,24 @@ Fork of **Bagshui 1.5.16** for WoW 1.18.1 Clients, modernized for [ClassicAPI](h
 
 **Feng shui for your bags:** A Vanilla WoW 1.12 (and WoW 1.18.1 Clients) inventory addon.<br><sup>Not for Classic or Retail; you have [so](https://www.curseforge.com/wow/addons/better-bags) [many](https://www.curseforge.com/wow/addons/ark-inventory) [options](https://www.curseforge.com/wow/search?class=addons&categories=bags-inventory&sortBy=popularity).</sup>
 
-<h4><picture>
+<picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/veechs/Bagshui/wiki/images/BagshuiScreenshots.png">
-</picture><br>
+  <img src="https://github.com/veechs/Bagshui/wiki/images/BagshuiScreenshots.png" alt="Bagshui screenshots">
+</picture>
+
+## About this fork
+
+A fork of **Bagshui 1.5.16** for WoW 1.18.1 Clients, built on [ClassicAPI](https://github.com/brues-code/ClassicAPI) by Brues-Code.
+
+- **Hide a bag's items:** right-click (or Ctrl+Click) a bag button to hide everything in it (profession bags, quivers, soul bags...). Saved per character; **Show Hidden** brings them back.
+- **Multi-account Catalog:** items and gold from your other WoW accounts on the same computer show up in the Catalog and item tooltips. See [Sharing between accounts](#sharing-between-accounts).
+- **Requires ClassicAPI.** Without it Bagshui disables itself and leaves your settings alone. See [Requirements](#requirements).
+- **Drop-in replacement for upstream:** same `Bagshui` folder and `BagshuiData` SavedVariables. Do not run both.
+- See the [Changelog](Changelog.md) for everything that changed.
+
 ## Features
 
-- Single window inventory for Bags, Bank, and Keyring.
+- Single-window inventory for Bags, Bank, and Keyring.
 - [Customizable layout and design](https://github.com/veechs/Bagshui/wiki/Profiles) with automatic grouping and sorting.
 - [Categorization](https://github.com/veechs/Bagshui/wiki/Categories) via [rules](https://github.com/veechs/Bagshui/wiki/Rules) and item lists.
 - Per-inventory and account-wide [search](https://github.com/veechs/Bagshui/wiki/Searching).
@@ -52,7 +55,7 @@ Fork of **Bagshui 1.5.16** for WoW 1.18.1 Clients, modernized for [ClassicAPI](h
 📕 [Wiki](https://github.com/veechs/Bagshui/wiki) <sup>(upstream Bagshui; applies to this fork except as noted in the [Changelog](Changelog.md))</sup>
 🙋 [FAQ](https://github.com/veechs/Bagshui/wiki/FAQ)
 🐾 [Walkthroughs](https://github.com/veechs/Bagshui/wiki/Walkthroughs)
-🕝 [Version history](Changelog.md)
+🕝 [Changelog](Changelog.md)
 
 ## Requirements
 
@@ -66,24 +69,9 @@ Without ClassicAPI, Bagshui prints a message in chat and disables itself (your s
 
 To check that it's loaded, run `/script DEFAULT_CHAT_FRAME:AddMessage(tostring(CLASSIC_API_VERSION))` in game. A number means it is.
 
-## Sharing between accounts
-
-Bagshui already shares items and gold between the characters on one account. With **Nampower's file functions** it also shares them with your **other accounts on the same computer**: their characters (items, equipped gear and gold) appear in the Catalog, Catalog search and item tooltips, and you can view their bags and bank from the Character menu (read-only).
-
-Setup: in your launcher, enable **Mods → Nampower**. That's it. Check with `/script DEFAULT_CHAT_FRAME:AddMessage(tostring(WriteCustomFile))` (it should print `function`).
-
-How it works: each character writes one file (`Bagshui_<Name>_<Realm>.txt`) to the `CustomData` folder, which every client launched from the same install shares, and a short `Bagshui_roster.txt` lists who has one. At startup Bagshui reads the other accounts' files. No scripts, passwords or pairing.
-
-- Log in once on each account for its characters to appear on the others. After that, other accounts' data is as fresh as that character's last logout (or last change, since it saves while you play).
-- Other accounts' characters are loaded when you log in or `/reload`.
-- You can view their bags, bank and keyring from the Character menu like your own alts (offline view). They're also listed in the Character Data manager (marked "other account"), but can only be deleted from the account they belong to.
-- Characters that exist in this account's own saved data always take priority.
-- Deleting an alt in the Character Data manager also stops sharing it with your other accounts.
-- Without Nampower this does nothing and costs nothing.
-
-Inspired by [Bagertz](https://github.com/Salahaja/Bagertz) (tooltip counts across accounts), which uses the same Nampower folder.
-
 ## Installation
+
+Make sure you meet the [Requirements](#requirements) first.
 
 ### Easy mode (recommended)
 
@@ -102,6 +90,23 @@ Use [GitAddonsManager](https://woblight.gitlab.io/overview/gitaddonsmanager/).
    × `Bagshui-main\Bagshui.toc`
    × `Bagshui\Bagshui-main\Bagshui.toc`
    </sup>
+
+## Sharing between accounts
+
+Bagshui already shares items and gold between the characters on one account. With **Nampower's file functions** it also shares them with your **other accounts on the same computer**: their characters (items, equipped gear and gold) appear in the Catalog, Catalog search and item tooltips, and you can view their bags and bank from the Character menu (read-only).
+
+Setup: in your launcher, enable **Mods → Nampower**. That's it. Check with `/script DEFAULT_CHAT_FRAME:AddMessage(tostring(WriteCustomFile))` (it should print `function`).
+
+How it works: each character writes one file (`Bagshui_<Name>_<Realm>.txt`) to the `CustomData` folder, which every client launched from the same install shares, and a short `Bagshui_roster.txt` lists who has one. At startup Bagshui reads the other accounts' files. No scripts, passwords or pairing.
+
+- Log in once on each account for its characters to appear on the others. After that, other accounts' data is as fresh as that character's last logout (or last change, since it saves while you play).
+- Other accounts' characters are loaded when you log in or `/reload`.
+- You can view their bags, bank and keyring from the Character menu like your own alts (offline view). They're also listed in the Character Data manager (marked "other account"), but can only be deleted from the account they belong to.
+- Characters that exist in this account's own saved data always take priority.
+- Deleting an alt in the Character Data manager also stops sharing it with your other accounts.
+- Without Nampower this does nothing and costs nothing.
+
+Inspired by [Bagertz](https://github.com/Salahaja/Bagertz) (tooltip counts across accounts), which uses the same Nampower folder.
 
 ## Compatibility
 

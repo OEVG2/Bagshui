@@ -1,5 +1,11 @@
 # Bagshui Changelog
 
+## 1.6.0-octo.12 - 2026-10-18
+
+### Fixed
+
+- Right-click and Ctrl+Click on a Bank bag button picked the bag up instead of hiding its items. The Bank now uses the same hide/show handling as the inventory (and it works offline).
+
 ## 1.6.0-octo.11 - 2026-10-18
 
 ### Fixed

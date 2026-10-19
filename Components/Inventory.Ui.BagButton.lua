@@ -257,16 +257,7 @@ Bagshui:AddComponent(function()
         local hasBag = inventory:BagSlotButtonHasBag(this)
 
         -- Right-click or Ctrl+Click: hide/show the items in this bag.
-        -- (Never when something is on the cursor, so bag swapping and item placing still work.)
-        if
-          (_G.arg1 == "RightButton" or _G.IsControlKeyDown())
-          and not _G.CursorHasItem()
-          and not inventory.editMode
-          and Bagshui.config.HideBagSettings[bagNum]
-        then
-          local settingName = Bagshui.config.HideBagSettings[bagNum]
-          inventory.settings[settingName] = not inventory.settings[settingName]
-          inventory:UpdateBagBar()
+        if inventory:ToggleBagHiddenOnClick(this) then
           return
         end
 
@@ -619,6 +610,26 @@ Bagshui:AddComponent(function()
     -- Use code in Bagshui.Tooltips.lua to show info tooltip.
     _G.GameTooltip.bagshuiData.infoTooltipAlwayShow = true
     _G.GameTooltip:Show()
+  end
+
+  --- Right-click or Ctrl+Click on a bag button hides/shows the items in that bag.
+  --- Called from the bag button's OnClick (and from Bank's replacement OnClick).
+  --- Does nothing when something is on the cursor, so bag swapping and item placing still work.
+  ---@param bagSlotButton table Bag slot button that was clicked.
+  ---@return boolean handled # `true` if the click was used to toggle the bag, so the caller should stop.
+  function Inventory:ToggleBagHiddenOnClick(bagSlotButton)
+    local settingName = Bagshui.config.HideBagSettings[bagSlotButton.bagshuiData.bagNum]
+    if
+      settingName
+      and (_G.arg1 == "RightButton" or _G.IsControlKeyDown())
+      and not _G.CursorHasItem()
+      and not self.editMode
+    then
+      self.settings[settingName] = not self.settings[settingName]
+      self:UpdateBagBar()
+      return true
+    end
+    return false
   end
 
   function Inventory:GetBagSlotSwappableText(bagNum, noColors)

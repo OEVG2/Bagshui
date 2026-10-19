@@ -101,6 +101,10 @@ Bagshui:AddComponent(function()
     local oldOnClick = bagSlotButton:GetScript("OnClick")
     bagSlotButton:SetScript("OnClick", function()
       local this = _G.this
+      -- Right-click or Ctrl+Click hides/shows this bag's items (works offline too, but not on a bag slot that is still for sale).
+      if not self.containers[this.bagshuiData.bagNum].nextPurchasable and self:ToggleBagHiddenOnClick(this) then
+        return
+      end
       if not self.online then
         return
       end

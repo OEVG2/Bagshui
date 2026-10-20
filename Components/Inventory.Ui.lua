@@ -32,6 +32,19 @@ Bagshui:AddComponent(function()
     -- Prepare the window.
 
     self.uiFrame = ui:CreateWindowFrame("Frame")
+
+    -- Skins can give the inventory window a different backdrop than other windows.
+    if BsSkin.inventoryWindowBackdrop then
+      local backdrop = BsSkin.inventoryWindowBackdrop
+      self.uiFrame:SetBackdrop({
+        bgFile = backdrop.bgFile,
+        edgeFile = backdrop.edgeFile,
+        tile = true,
+        tileSize = backdrop.tileSize,
+        edgeSize = backdrop.edgeSize,
+        insets = { left = backdrop.insets, top = backdrop.insets, right = backdrop.insets, bottom = backdrop.insets },
+      })
+    end
     local uiFrame = self.uiFrame
 
     -- Start with the window in the correct position and hidden.

@@ -511,14 +511,21 @@ Bagshui:LoadComponent(function()
       edgeSize = 32,
       insets = 11,
     },
+    -- The inventory window (bags, bank, keyring) uses the thinner silver tooltip border instead.
+    inventoryWindowBackdrop = {
+      bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+      edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+      tileSize = 32,
+      edgeSize = 16,
+      insets = 4,
+    },
     -- Tint applied to the window backdrop when "use skin colors" is on (white = textures unmodified).
     windowColor = { 1, 1, 1, 1 },
     windowBorderColor = { 1, 1, 1, 1 },
 
     -- Make room for the thicker border.
     windowPadding = 16,
-    inventoryWindowPadding = 14,
-    inventoryWindowMinWidth = 420,
+    inventoryWindowPadding = 8,
   }
   Bagshui.config.Skins.useClassicSkin = true
 

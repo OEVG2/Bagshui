@@ -1279,56 +1279,6 @@ Bagshui:AddComponent(function()
           },
 
           {
-            menuTitle = L.Menu_Settings_Theme,
-          },
-          {
-            name = "theme",
-            scope = BS_SETTING_SCOPE.ACCOUNT,
-            type = BS_SETTING_TYPE.CHOICES,
-            inline = true,
-            defaultValue = "auto",
-            choices = {
-              {
-                value = "auto",
-                text = L.Setting_Theme_Auto,
-                tooltipTitle = L.Setting_Theme_Auto,
-                tooltipText = L.Setting_Theme_Auto_TooltipText,
-              },
-              {
-                value = "classic",
-                text = L.Setting_Theme_Classic,
-              },
-              {
-                value = "original",
-                text = L.Setting_Theme_Original,
-              },
-              {
-                value = "pfui",
-                text = L.Setting_Theme_pfUI,
-                tooltipTitle = L.Setting_Theme_pfUI,
-                tooltipText = L.Setting_Theme_pfUI_TooltipText,
-              },
-            },
-            onChange = function(settings, settingName, newValue)
-              -- The theme is chosen while Bagshui loads, so a reload is needed.
-              local dialogName = "BAGSHUI_THEME_RELOAD_UI"
-              if not _G.StaticPopupDialogs[dialogName] then
-                _G.StaticPopupDialogs[dialogName] = {
-                  text = L.Setting_Theme_ReloadPrompt,
-                  button1 = L.Reload,
-                  button2 = L.NotNow,
-                  timeout = 0,
-                  whileDead = true,
-                  OnAccept = function()
-                    _G.ReloadUI()
-                  end,
-                }
-              end
-              _G.StaticPopup_Show(dialogName)
-            end,
-          },
-
-          {
             menuTitle = L.Menu_Settings_Behaviors,
           },
           {

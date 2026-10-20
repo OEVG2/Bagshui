@@ -1363,8 +1363,6 @@ Bagshui:LoadComponent(function()
 
     ["windowMaxColumns"] = "Maximum Columns",
     ["windowMaxColumns_TooltipText"] = "Window width limit in number of items per row.",
-    ["balanceGroupRows"] = "Balance Group Rows",
-    ["balanceGroupRows_TooltipText"] = "When a group wraps onto more than one row, make the rows about the same length instead of leaving the last row mostly empty.",
 
     ["windowScale"] = "Scale",
     ["windowScale_TooltipTitle"] = "Window Scale",

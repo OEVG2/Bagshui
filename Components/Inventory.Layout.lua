@@ -795,24 +795,6 @@ Bagshui:AddComponent(function()
           until rowWidthInItems <= maxColumns or unshrinkableGroupCount >= numGroupsInRow
         end
 
-        -- Balance rows: a group that wraps onto more than one row is narrowed so its rows are
-        -- (nearly) the same length, instead of one long row and a mostly empty one.
-        -- Example: 16 items in a group that was 14 wide become 2 rows of 8.
-        if self.settings.balanceGroupRows then
-          for columnNum = rowGroupStart, rowGroupEnd, rowGroupStep do
-            local balanceGroupId = self.layout[rowNum][columnNum].groupId
-            local balanceCount = balanceGroupId and self.groupItemCounts[balanceGroupId] or 0
-            local balanceWidth = balanceGroupId and self.groupWidthsInItems[balanceGroupId] or 0
-            if balanceWidth > 0 and balanceCount > balanceWidth then
-              local balanceRows = math.ceil(balanceCount / balanceWidth)
-              local balancedWidth = math.ceil(balanceCount / balanceRows)
-              if balancedWidth < balanceWidth then
-                self.groupWidthsInItems[balanceGroupId] = balancedWidth
-              end
-            end
-          end
-        end
-
         -- Is there anything to display on this row?
         if totalItemsInRow == 0 and not self.editMode then
           -- All groups are not visible.

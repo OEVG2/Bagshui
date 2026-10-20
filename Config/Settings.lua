@@ -815,14 +815,6 @@ Bagshui:AddComponent(function()
             max = 30,
             inventoryWindowUpdateOnChange = true,
           },
-          {
-            name = "balanceGroupRows",
-            scope = BS_SETTING_SCOPE.INVENTORY,
-            profileScope = BS_SETTING_PROFILE_SCOPE.DESIGN,
-            type = BS_SETTING_TYPE.BOOLEAN,
-            defaultValue = true,
-            inventoryWindowUpdateOnChange = true,
-          },
 
           {
             menuTitle = L.Menu_Settings_ItemSlots,

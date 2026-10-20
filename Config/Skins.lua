@@ -493,5 +493,37 @@ Bagshui:LoadComponent(function()
       Bagshui.config.Skins.activeSkin = "pfUI"
     end
   end
+
+  -- "Classic" skin: stock Blizzard dialog frame look (parchment-blue dialog background and
+  -- the chunky dialog border) for windows, with the usual tooltip-style borders on slots and
+  -- groups. Uses only textures that ship with the 1.12 client.
+  -- Set Bagshui.config.Skins.useClassicSkin to false to go back to the original flat look.
+  -- Not used when pfUI is skinning Bagshui.
+  Bagshui.config.Skins.Classic = {
+    frameBackgroundColor = { 1, 1, 1, 1 },
+    frameBorderColor = { 1, 1, 1, 1 },
+
+    -- Window-only backdrop (see Ui:SetFrameBackdrop()). Groups and widgets keep the normal borders.
+    windowBackdrop = {
+      bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+      edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+      tileSize = 32,
+      edgeSize = 32,
+      insets = 11,
+    },
+    -- Tint applied to the window backdrop when "use skin colors" is on (white = textures unmodified).
+    windowColor = { 1, 1, 1, 1 },
+    windowBorderColor = { 1, 1, 1, 1 },
+
+    -- Make room for the thicker border.
+    windowPadding = 16,
+    inventoryWindowPadding = 14,
+    inventoryWindowMinWidth = 420,
+  }
+  Bagshui.config.Skins.useClassicSkin = true
+
+  if Bagshui.config.Skins.activeSkin == "Bagshui" and Bagshui.config.Skins.useClassicSkin then
+    Bagshui.config.Skins.activeSkin = "Classic"
+  end
 end)
 

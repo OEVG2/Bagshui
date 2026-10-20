@@ -237,6 +237,28 @@ Bagshui:AddComponent(function()
       BsSkin.windowSkinFunc(frame)
     end
 
+    -- Skins can give windows their own backdrop (the Classic skin uses the Blizzard dialog frame).
+    -- This only applies when no explicit style was requested so groups and widgets are unaffected.
+    local windowBackdrop = BsSkin.windowBackdrop
+    if
+      windowBackdrop
+      and borderStyle == nil
+      and bgFile == nil
+      and frame.bagshuiData
+      and frame.bagshuiData.isWindow
+    then
+      local inset = windowBackdrop.insets
+      frame:SetBackdrop({
+        bgFile = windowBackdrop.bgFile,
+        edgeFile = windowBackdrop.edgeFile,
+        tile = true,
+        tileSize = windowBackdrop.tileSize,
+        edgeSize = windowBackdrop.edgeSize,
+        insets = { left = inset, top = inset, right = inset, bottom = inset },
+      })
+      return
+    end
+
     local finalBorderStyle =
       -- A full border styling table was provided.
       type(borderStyle) == "table" and borderStyle

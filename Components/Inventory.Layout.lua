@@ -516,11 +516,16 @@ Bagshui:AddComponent(function()
     if self.settings.windowUseSkinColors and BsSkin.skinBackgroundColor then
       self.windowColor = BsSkin.skinBackgroundColor
     end
+    if self.settings.windowUseSkinColors and BsSkin.windowBackdrop then
+      self.windowColor = BsSkin.windowColor or { 1, 1, 1, 1 }
+    end
 
     if not self.online then
       self.borderColor = BS_COLOR.RED
     elseif self.settings.windowUseSkinColors and BsSkin.skinBorderColor then
       self.borderColor = BsSkin.skinBorderColor
+    elseif self.settings.windowUseSkinColors and BsSkin.windowBackdrop then
+      self.borderColor = BsSkin.windowBorderColor or { 1, 1, 1, 1 }
     end
 
     self.uiFrame:SetBackdropColor(self.windowColor[1], self.windowColor[2], self.windowColor[3], self.windowColor[4])

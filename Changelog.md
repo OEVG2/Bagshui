@@ -1,5 +1,21 @@
 # Bagshui Changelog
 
+## 1.6.1.1 - 2026-10-19
+
+### Added
+
+- **Classic theme:** Bagshui windows now use the stock Blizzard dialog frame (menus and dialogs) and the silver tooltip border (bag, bank and keyring windows). pfUI users keep the pfUI look when pfUI is skinning Bagshui. Set `useClassicSkin = false` in `Config/Skins.lua` to go back to the original flat look.
+
+### Changed
+
+- The repository's main branch is now `main` (it was `vanilla`).
+- README: reorganized, Nampower listed as an optional requirement, and links to the deleted upstream wiki now point to a web archive snapshot.
+- Credits: added Bagertz (cross-account sharing) and GudaBags / Guda (per-bag hide).
+
+### Removed
+
+- The Chinese (zhCN) translation. This fork supports English only. Other clients fall back to English.
+
 ## 1.6.1 - 2026-10-19
 
 First stable release. The earlier 1.6.0-octo.N builds were betas; their notes are kept below.
@@ -8,11 +24,6 @@ First stable release. The earlier 1.6.0-octo.N builds were betas; their notes ar
 
 - **Hide a bag's items:** right-click or Ctrl+Click a bag icon to hide or show everything in that bag (inventory and bank). Saved per character; Show Hidden and Edit Mode reveal hidden items.
 - **Cross-account sharing** of the Catalog, gold, equipped gear and full inventories between accounts on the same computer (requires Nampower).
-- **Classic theme:** Bagshui windows now use the stock Blizzard dialog frame (menus and dialogs) and the silver tooltip border (bag, bank and keyring windows). pfUI users keep the pfUI look when pfUI is skinning Bagshui. Set `useClassicSkin = false` in `Config/Skins.lua` to go back to the original flat look.
-
-### Removed
-
-- The Chinese (zhCN) translation. This fork supports English only. Other clients fall back to English.
 
 ### Fixed
 

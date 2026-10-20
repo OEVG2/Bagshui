@@ -2,7 +2,7 @@
 ## Title: Bagshui
 ## Notes: |cffdb4e97Feng shui for your bags|r|nAll-in-one autosorting inventory replacement|nWoW 1.18.1 Clients fork - requires ClassicAPI
 ## Author: veechs | txtsd | WoW 1.18.1 Clients fork
-## Version: 1.6.1
+## Version: 1.6.1.1
 ## OptionalDeps: AtlasLoot, ItemRack, Outfitter, pfUI, !!!ClassicAPI
 ## RequiredMods: ClassicAPI.dll (https://github.com/brues-code/ClassicAPI)
 ## SavedVariables: BagshuiData

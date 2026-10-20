@@ -8,6 +8,7 @@ First stable release. The earlier 1.6.0-octo.N builds were betas; their notes ar
 
 - **Hide a bag's items:** right-click or Ctrl+Click a bag icon to hide or show everything in that bag (inventory and bank). Saved per character; Show Hidden and Edit Mode reveal hidden items.
 - **Cross-account sharing** of the Catalog, gold, equipped gear and full inventories between accounts on the same computer (requires Nampower).
+- **Classic theme:** Bagshui windows now use the stock Blizzard dialog frame (menus and dialogs) and the silver tooltip border (bag, bank and keyring windows). pfUI users keep the pfUI look when pfUI is skinning Bagshui. Set `useClassicSkin = false` in `Config/Skins.lua` to go back to the original flat look.
 
 ### Removed
 

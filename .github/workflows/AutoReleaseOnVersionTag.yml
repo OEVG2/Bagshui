@@ -4,15 +4,27 @@ on:
     tags:
     # Trailing * also allows suffixes such as v1.6.2-beta.1.
     - "v[0-9]+.[0-9]+.[0-9]+*"
+  # Manual run from the Actions tab: enter an existing tag (for example v1.6.2).
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to release (for example v1.6.2)"
+        required: true
 jobs:
   release:
-    # Override repository workflow security settings to ensure git-release can create the new release.
+    # Override repository workflow security settings so the release can be created.
     permissions:
       contents: write
     runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.tag || github.ref }}
 
     - name: Create Zip
       uses: thedoctor0/zip-release@0.7.5
@@ -21,11 +33,44 @@ jobs:
         filename: 'Bagshui.zip'
         exclusions: '*.git* .vscode .editorconfig'
 
+    # Release notes are the changelog section whose heading starts with the tag's version
+    # (for example "## 1.6.2 - 2026-10-19" for tag v1.6.2).
+    - name: Get release notes
+      id: notes
+      shell: bash
+      run: |
+        VERSION="${RELEASE_TAG#v}"
+        awk -v v="$VERSION" '
+          /^## / {
+            if (found) exit
+            if ($0 == "## " v || index($0, "## " v " ") == 1) found = 1
+            next
+          }
+          found
+        ' Changelog.md > release-notes.md
+        if [ ! -s release-notes.md ]; then
+          echo "No Changelog.md section found for $VERSION" >&2
+          exit 1
+        fi
+        # A release you already wrote by hand keeps its title and notes.
+        if gh release view "$RELEASE_TAG" > /dev/null 2>&1; then
+          echo "keep_existing=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "keep_existing=false" >> "$GITHUB_OUTPUT"
+        fi
+        # Anything with a suffix (v1.6.2-beta.1) is a pre-release.
+        if [[ "$VERSION" == *-* ]]; then
+          echo "prerelease=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "prerelease=false" >> "$GITHUB_OUTPUT"
+        fi
+
     - name: Create Release
-      uses: docker://antonyurchenko/git-release:latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # Filename is case-sensitive so we have to override the default CHANGELOG.md.
-        CHANGELOG_FILE: "Changelog.md"
+      uses: softprops/action-gh-release@v2
       with:
-        args: Bagshui.zip
+        tag_name: ${{ env.RELEASE_TAG }}
+        name: ${{ steps.notes.outputs.keep_existing == 'false' && format('Bagshui {0}', env.RELEASE_TAG) || '' }}
+        body_path: ${{ steps.notes.outputs.keep_existing == 'false' && 'release-notes.md' || '' }}
+        prerelease: ${{ steps.notes.outputs.prerelease }}
+        files: Bagshui.zip
+        fail_on_unmatched_files: true
